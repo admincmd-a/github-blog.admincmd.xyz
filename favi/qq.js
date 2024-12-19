@@ -23,21 +23,21 @@ function updateProgressBars() {
 
   const minuteProgress = (now.getSeconds() / 60) * 100;// 计算已过分钟百分比
 
-  document.getElementById('year-progress').textContent = yearProgress.toFixed(5) + '%';
-  document.getElementById('year-progress-bar').style.width = yearProgress.toFixed(5) + '%';// 宽度百分比
+  document.getElementById('year-progress').textContent = yearProgress.toFixed(6) + '%';
+  document.getElementById('year-progress-bar').style.width = yearProgress.toFixed(6) + '%';// 宽度百分比
 
   document.getElementById('month-progress').textContent = monthProgress.toFixed(5) + '%';
   document.getElementById('month-progress-bar').style.width = monthProgress.toFixed(5) + '%';// 同上
 
-  document.getElementById('day-progress').textContent = dayProgress.toFixed(5) + '%';
-  document.getElementById('day-progress-bar').style.width = dayProgress.toFixed(5) + '%';
+  document.getElementById('day-progress').textContent = dayProgress.toFixed(4) + '%';
+  document.getElementById('day-progress-bar').style.width = dayProgress.toFixed(4) + '%';
 
-  document.getElementById('hour-progress').textContent = hourProgress.toFixed(5) + '%';
-  document.getElementById('hour-progress-bar').style.width = hourProgress.toFixed(5) + '%';
+  document.getElementById('hour-progress').textContent = hourProgress.toFixed(2) + '%';
+  document.getElementById('hour-progress-bar').style.width = hourProgress.toFixed(2) + '%';
 
-  document.getElementById('minute-progress').textContent = minuteProgress.toFixed(5) + '%';
-  document.getElementById('minute-progress-bar').style.width = minuteProgress.toFixed(5) + '%';
+  document.getElementById('minute-progress').textContent = minuteProgress.toFixed(0) + '%';
+  document.getElementById('minute-progress-bar').style.width = minuteProgress.toFixed(0) + '%';
 
 }
 
-setInterval(updateProgressBars, 1000);//每秒更新一次
+setInterval(updateProgressBars, 1);//每秒更新一次

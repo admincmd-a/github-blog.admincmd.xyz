@@ -1,3 +1,4 @@
+https://blog.admincmd.xyz/favi/qq.html
 https://blog.admincmd.xyz/post/f483a3a94892/index.html
 https://blog.admincmd.xyz/post/8cf1f32c4af1/index.html
 https://blog.admincmd.xyz/post/ca2d8449e095/index.html
@@ -21,7 +22,6 @@ https://blog.admincmd.xyz/log/index.html
 https://blog.admincmd.xyz/lyb_files/index.html
 https://blog.admincmd.xyz/charts/index.html
 https://blog.admincmd.xyz/about/index.html
-https://blog.admincmd.xyz/favi/qq.html
 https://blog.admincmd.xyz/tags/index.html
 https://blog.admincmd.xyz/categories/index-1.html
 https://blog.admincmd.xyz/categories/index.html

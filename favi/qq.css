@@ -19,3 +19,12 @@ body
   line-height: 20px;
   transition: width 1.5s;/*一次到目标位置的速度*/
 }
+
+/* @font-face {
+  font-family: 'ds-digi';
+  src: url('/font/ds-digi.woff2') format('woff2'),
+  url('/font/ds-digi.woff2') format('woff2');
+  }
+.p-digi{
+
+} */
