@@ -1,4 +1,6 @@
 // 主 JS 文件
+/*
+*/
 
 // 往控制台里写点东西
 console.log('Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,');
@@ -111,43 +113,36 @@ function NewWindowsSetting(){
 })
 }
 
+
+
 // 用户跳过来弄过去改下标题
 // 修改标题
 document.addEventListener('DOMContentLoaded', (event) => {
-    let originalTitle = document.title; // 记录初始标题
-    let hasFocus = true;
-
-    // 定义不切换标题的 URL 列表
-    
-    const lostFocusTitle = '这都跑去干啥了？ 让我康康 | ' + originalTitle; // 页面失去焦点时的标题
-    const gainedFocusTitle = '干啥去了，现在才回来……  | ' + originalTitle;   // 页面获得焦点时的标题
+    originalTitle = document.title; // 记录初始标题
+    lostFocusTitle = `这都跑去干啥了？ 让我康康 | ${originalTitle}`; // 页面失去焦点时的标题
+    gainedFocusTitle = `干啥去了，现在才回来……  | ${originalTitle}`; // 页面获得焦点时的标题
 
     // 监听页面失去焦点和获得焦点事件
     document.addEventListener('visibilitychange', () => {
-        // 检查 URL 是否在排除列表中
-        const currentUrl = window.location.href;
-
-        if (shouldExclude) {
-            return; // 如果 URL 在排除列表中，则直接返回
-        }
-        if (document.hidden) {
-            hasFocus = false; // 页面失去焦点
-            // 检查当前标题是不是404，如果是则直接返回
-            if (document.title == '页面没有找到 | 管理员 - 命令提示符')
-            {
-                return;
-            }
-            document.title = lostFocusTitle; // 更改标题
-        } else {
-            hasFocus = true; // 页面获得焦点
-            if (document.title !== gainedFocusTitle) {
+        try {
+            //if (shouldExclude) return; // 如果 URL 在排除列表中，则直接返回
+            
+            if (document.hidden) {
+                // 页面失去焦点
+                if (document.title !== '页面没有找到 | 管理员 - 命令提示符') {
+                    document.title = lostFocusTitle; // 更改标题
+                }
+            } else {
+                // 页面获得焦点
                 document.title = gainedFocusTitle; // 更改标题
-                setTimeout(() => { 
-                    if (hasFocus) {
+                setTimeout(() => {
+                    if (!document.hidden) {
                         document.title = originalTitle; // 改回来
                     }
                 }, 2000); // 等待2秒
             }
+        } catch (error) {
+            console.error('标题更改过程中出错:', error);
         }
     });
 });
@@ -156,6 +151,367 @@ document.addEventListener('DOMContentLoaded', (event) => {
 // 欢迎语，cookie 提醒 --------------------------------------------
 // 首次访问，弹出Cookie提醒
 welcometxmap()
+
+// 以下是欢迎语
+// ----------------------------------
+function welcometxmap() {
+    //请求数据
+    ipLoacation = window.saveToLocal.get('ipLocation');
+    if (ipLoacation) {
+        // 使用 ipLocation
+    } else {
+        // 数据已过期或不存在
+        var txkey = 'ET6BZ-DDXEN-JRBFT-SZEUP-WBLXS-V7FGJ';
+        // ttttttttttttttttttt
+        var script = document.createElement('script');
+        var url = `https://apis.map.qq.com/ws/location/v1/ip?key=${txkey}&output=jsonp`;
+        script.src = url;
+        window.QQmap = function (data) {
+            ipLoacation = data;
+            // 将数据保存到 localStorage，过期时间设置为 1 天
+            window.saveToLocal.set('ipLocation', ipLoacation, 1);
+            document.body.removeChild(script);
+            delete window.QQmap;
+        };
+        document.body.appendChild(script);
+    }
+    showWelcome();
+}
+function getDistance(e1, n1, e2, n2) {
+    const R = 6371
+    const { sin, cos, asin, PI, hypot } = Math
+    let getPoint = (e, n) => {
+        e *= PI / 180
+        n *= PI / 180
+        return { x: cos(n) * cos(e), y: cos(n) * sin(e), z: sin(n) }
+    }
+
+    let a = getPoint(e1, n1)
+    let b = getPoint(e2, n2)
+    let c = hypot(a.x - b.x, a.y - b.y, a.z - b.z)
+    let r = asin(c / 2) * 2 * R
+    return Math.round(r);
+}
+
+function showWelcome() {
+
+    let dist = getDistance(114.305000, 30.592800, ipLoacation.result.location.lng, ipLoacation.result.location.lat);
+    let pos = ipLoacation.result.ad_info.nation;
+    let ip = ipLoacation.result.ip;
+    let ipDZ;
+    let posdesc;//要显示的信息
+
+    //根据国家、省份、城市信息自定义欢迎语
+    //海外地区不支持省份及城市信息
+    switch (ipLoacation.result.ad_info.nation) {
+        case "日本":
+            posdesc = "よろしく，一起去看樱花吗";
+            break;
+        case "美国":
+            posdesc = "Make America Great Again!";
+            break;
+        case "英国":
+            posdesc = "想同你一起夜乘伦敦眼";
+            break;
+        case "俄罗斯":
+            posdesc = "干了这瓶伏特加！";
+            break;
+        case "法国":
+            posdesc = "C'est La Vie";
+            break;
+        case "德国":
+            posdesc = "Die Zeit verging im Fluge.";
+            break;
+        case "澳大利亚":
+            posdesc = "一起去大堡礁吧！";
+            break;
+        case "加拿大":
+            posdesc = "拾起一片枫叶赠予你";
+            break;
+        case "南极洲":
+            posdesc = "南极洲的风很大，你一定记得要带伞！";
+            break;
+        case "巴西":
+            posdesc = "巴西足球";
+            break;
+        case "加拿大":
+            posdesc = "加拿大不大";
+            break;
+        case "中国":
+            pos = ipLoacation.result.ad_info.province + " " + ipLoacation.result.ad_info.city;
+            switch (ipLoacation.result.ad_info.province) {
+                case "北京市":
+                    pos = "北京市";
+                    posdesc = "北——京——欢迎你~~~";
+                    break;
+                case "天津市":
+                    pos = "天津市";
+                    posdesc = "讲段相声吧。";
+                    break;
+                case "重庆市":
+                    pos = "重庆市";
+                    posdesc = "高德地图:已到达重庆，下面切换百度地图导航。百度地图：已到达重庆，下面切换高德地图导航。"
+                    break;
+                case "河北省":
+                    posdesc = "山势巍巍成壁垒，天下雄关。铁马金戈由此向，无限江山。";
+                    break;
+                case "山西省":
+                    posdesc = "展开坐具长三尺，已占山河五百余。";
+                    break;
+                case "内蒙古自治区":
+                    posdesc = "天苍苍，野茫茫，风吹草低见牛羊。";
+                    break;
+                case "辽宁省":
+                    posdesc = "我想吃烤鸡架！";
+                    break;
+                case "吉林省":
+                    posdesc = "状元阁就是东北烧烤之王。";
+                    break;
+                case "黑龙江省":
+                    posdesc = "哈尔滨红肠,东北饺子";
+                    break;
+                case "上海市":
+                    pos = "上海市";
+                    posdesc = "众所周知，中国只有 3 个城市。";
+                    break;
+                case "江苏省":
+                    switch (ipLoacation.result.ad_info.city) {
+                        case "南京市":
+                            posdesc = "欢迎来自安徽省南京市的小伙伴。";
+                            break;
+                        case "苏州市":
+                            posdesc = "上有天堂，下有苏杭。";
+                            break;
+                        default:
+                            posdesc = "散装是必须要散装的。";
+                            break;
+                    }
+                    break;
+                case "浙江省":
+                    posdesc = "东风渐绿西湖柳，雁已还人未南归。";
+                    break;
+                case "安徽省":
+                    posdesc = "蚌埠住了，芜湖起飞。";
+                    break;
+                case "福建省":
+                    posdesc = "井邑白云间，岩城远带山。";
+                    break;
+                case "江西省":
+                    posdesc = "落霞与孤鹜齐飞，秋水共长天一色。";
+                    break;
+                case "山东省":
+                    posdesc = "遥望齐州九点烟，一泓海水杯中泻。";
+                break;
+                case "湖北省":
+                switch (ipLoacation.result.ad_info.city) {
+                    case "武汉市":
+                        posdesc = "哟，我也住在武汉市。大江大河大武汉，走，吃热干面去！";
+                        break;
+                    case "咸宁市":
+                        posdesc = "我老家在咸宁。";
+                        break;
+                    default:
+                        posdesc = "老板，来碗热干面！";
+                        break;
+                }
+                    break;
+                case "湖南省":
+                    posdesc = "74751，长沙斯塔克。";
+                    break;
+                case "广东省":
+                    posdesc = "老板来两斤福建人。";
+                    break;
+                case "广西壮族自治区":
+                    posdesc = "桂林山水甲天下。";
+                    break;
+                case "海南省":
+                    posdesc = "朝观日出逐白浪，夕看云起收霞光。";
+                    break;
+                case "四川省":
+                    posdesc = "康康川妹子。";
+                    break;
+                case "贵州省":
+                    posdesc = "茅台，学生，再塞200。";
+                    break;
+                case "云南省":
+                    posdesc = "玉龙飞舞云缠绕，万仞冰川直耸天。";
+                    break;
+                case "西藏自治区":
+                    posdesc = "躺在茫茫草原上，仰望蓝天。";
+                    break;
+                case "陕西省":
+                    posdesc = "来份臊子面加馍。";
+                    break;
+                case "甘肃省":
+                    posdesc = "羌笛何须怨杨柳，春风不度玉门关。";
+                    break;
+                case "青海省":
+                    posdesc = "牛肉干和老酸奶都好好吃。";
+                    break;
+                case "宁夏回族自治区":
+                    posdesc = "大漠孤烟直，长河落日圆。";
+                    break;
+                case "新疆维吾尔自治区":
+                    posdesc = "驼铃古道丝绸路，胡马犹闻唐汉风。";
+                    break;
+                case "台湾省":
+                    posdesc = "我在这头，大陆在那头。";
+                    break;
+                case "香港特别行政区":
+                    pos = "香港特别行政区";
+                    posdesc = "永定贼有残留地鬼嚎，迎击光非岁玉。";
+                    break;
+                case "澳门特别行政区":
+                    pos = "澳门特别行政区";
+                    posdesc = "性感荷官，在线发牌。";
+                    break;
+                default:
+                    posdesc = "社会主义大法好。";
+                    break;
+            }
+            break;
+        default:
+            posdesc = "带我去你的国家逛逛吧。";
+            break;
+    }
+
+    //判断时间
+    let timeChange;
+    let date = new Date();
+    if (date.getHours()>= 5 && date.getHours() < 11) timeChange = "<span>上午好</span>，一日之计在于晨";
+    else if (date.getHours()>= 1 && date.getHours() < 13) timeChange = "<span>中午好</span>，开——饭——了——";
+    else if (date.getHours() >= 13 && date.getHours() < 15) timeChange = "<span>下午好</span>，懒懒地睡个午觉吧！";
+    else if (date.getHours() >= 15 && date.getHours() < 16) timeChange = "<span>下午三点了</span>，上课摸鱼 ING...";
+    else if (date.getHours() >= 16 && date.getHours() < 19) timeChange = "<span>夕阳无限好！</span>";
+    else if (date.getHours() >= 19 && date.getHours() < 24) timeChange = "<span>晚上好</span>，我要写作业了……";
+    else timeChange = "都几点了，还在熬夜？";
+
+
+
+    //自定义文本需要放的位置
+    document.getElementById("welcome-info").innerHTML = `欢迎来自<span>${pos}</span>的小伙伴，${timeChange}<br>你距我约有<span>${dist}</span>公里，${posdesc}，您的 IP 地址是 ${ip}`;
+
+    if (sessionStorage.getItem("popCookieWindow") != "0") {
+        setTimeout(function () {
+            Snackbar.show({
+                text: 'INFO 本站使用 Cookie 和本地 会话存储 保证浏览体验和网站统计',
+                pos: 'top-right',
+                actionText: "查看博客声明",
+                onActionClick: function (element) {
+                    window.open("/license")
+                },
+            })
+        }, 3500)
+    }
+    //不在弹出Cookie提醒
+    sessionStorage.setItem("popCookieWindow", "0");
+    
+    
+    let referrer = document.referrer || ' ? ? ? ';
+    let domain = referrer ? referrer.split("://")[1] : ' ? ? ? ';
+    domain = domain ? domain.split("/")[0] : ' ? ? ? ';
+
+    setTimeout(function () { // 康康是不是来自其他网站
+        if(domain=='blog.admincmd.xyz') {
+            console.log('由本站主站站点访问')
+        } else if(domain=='vercel-blog.admincmd.xyz') {
+            console.log('由本站镜像站点访问') // 已弃用此域名
+        } else if(domain=='netlify-blog.admincmd.xyz') {
+            console.log('由本站镜像站点访问')
+        } else if(domain=='cf-blog.admincmd.xyz') {
+            console.log('由本站镜像站点访问')
+        } else if(domain=='github-blog.admincmd.xyz') {
+            console.log('由本站镜像站点访问')
+        } else if (domain == 'www.travelling.cn') {
+            // 康康是不是来自开往的
+            Snackbar.show({
+                text: '欢迎来自开往的穿梭者！',
+                pos: 'top-center',
+            })
+        
+        } else if (domain == ' ? ? ? ') { 
+            console.log('由外部站点访问')
+            if(domain==' ? ? ? ') {
+                domain = pos;// 若来源为空，则使用定位信息
+                Snackbar.show({
+                    text: `欢迎从来自 ${domain} 的访客访问本站！`,
+                    pos: 'top-center',
+                    actionText: "",
+                    onActionClick: function (element) {
+                        window.open("")
+                    },
+                });
+            } else {
+                console.warn('');
+                Snackbar.show({// 如果有
+                    text: `欢迎从来自 ${domain} 的访客访问本站！`,
+                    pos: 'top-center',
+                    actionText: "",
+                    onActionClick: function (element) {
+                        window.open("")
+                    },
+                });
+            }
+        }
+            
+    },2500)
+}
+
+
+    // 如没有来源，则修改为？？？
+    // if (document.referrer==undefined||document.referrer.indexOf("www.travellings.cn")!=-1||document.referrer.indexOf("www.travellings.cn")!=-1)
+    //     { 
+            
+            
+    //     } else {
+        //     setTimeout(function () { // 康康是不是来自其他网站
+        //         if(domain=='blog.admincmd.xyz') {
+        //             console.log('由本站主站站点访问')
+        //         } else if(domain=='vercel-blog.admincmd.xyz') {
+        //             console.log('由本站镜像站点访问') // 已弃用此域名
+        //         } else if(domain=='netlify-blog.admincmd.xyz') {
+        //             console.log('由本站镜像站点访问')
+        //         } else if(domain=='cf-blog.admincmd.xyz') {
+        //             console.log('由本站镜像站点访问')
+        //         } else if(domain=='github-blog.admincmd.xyz') {
+        //             console.log('由本站镜像站点访问')
+        //         } else if (domain == 'www.travelling.cn') {
+        //             // 康康是不是来自开往的
+        //             Snackbar.show({
+        //                 text: '欢迎来自开往的穿梭者！',
+        //                 pos: 'top-center',
+        //             })
+                
+        //         } else if (domain == ' ? ? ? ') { 
+        //             console.log('由外部站点访问')
+        //             if(domain==' ? ? ? ') {
+        //                 domain = pos;// 若来源为空，则使用定位信息
+        //                 Snackbar.show({
+        //                     text: `欢迎从来自 ${domain} 的访客访问本站！`,
+        //                     pos: 'top-center',
+        //                     actionText: "",
+        //                     onActionClick: function (element) {
+        //                         window.open("")
+        //                     },
+        //                 });
+        //             } else {
+        //                 console.warn('');
+        //                 Snackbar.show({// 如果有
+        //                     text: `欢迎从来自 ${domain} 的访客访问本站！`,
+        //                     pos: 'top-center',
+        //                     actionText: "",
+        //                     onActionClick: function (element) {
+        //                         window.open("")
+        //                     },
+        //                 });
+        //             }
+    
+        //             }
+                    
+        //     },2500)
+        // }
+    
+// }
 
 //自带上文浏览器提示
 
@@ -552,7 +908,7 @@ addLongtabListener(box, popupMenu)
 function SwitchActivateLightMode() {
     activateLightMode()//调用 （浏览器）可能是的把，将调整至明亮模式
     sessionStorage.setItem("ActivateMode", "0"); //写个Cook
-    document.getElementById("travellings-logo").src = "https://www.travellings.cn/assets/b.png";
+    LigheMode();
     // 将需要调整的元素修改代码扔在这里
 // 调整至明亮模式
     //document.documentElement.setAttribute('data-theme', 'light')
@@ -561,7 +917,7 @@ function SwitchActivateLightMode() {
 function SwichActivateDarkMode() {
     activateDarkMode()
     sessionStorage.setItem("ActivateMode", "1");
-    document.getElementById("travellings-logo").src = "https://www.travellings.cn/assets/w.png";
+    DarkMode();
     // 同上
     // 调整至暗黑模式
     //document.documentElement.setAttribute('data-theme', 'dark')
@@ -572,16 +928,22 @@ function SwichActivateDarkMode() {
 if (sessionStorage.getItem("ActivateMode") == "1") {//检查cook，并判断是否为暗黑模式
     // 暗黑模式
     // 将需要调整的元素修改代码扔在这里
-    document.getElementById("travellings-logo").src = "https://www.travellings.cn/assets/w.png";
+    DarkMode();
 } else {
     // 明亮模式
+    LigheMode();    
+}
+
+
+function LigheMode() {
     document.getElementById("travellings-logo").src = "https://www.travellings.cn/assets/b.png";
     
-    
-    const GLOBAL_CONFIG = {
 
-        Snackbar: {"chs_to_cht":"已切为繁体中文","cht_to_chs":"已切为简体中文","day_to_night":"已切为深色模式","night_to_day":"已切为浅色模式","bgLight":"#FFFFFF","bgDark":"#1f1f1f","position":"top-right"},
-      }
+}
+
+
+function DarkMode() {
+    document.getElementById("travellings-logo").src = "https://www.travellings.cn/assets/w.png";
 }
 
 function justLookAround() {
@@ -624,309 +986,19 @@ function justLookAround() {
 }
 
 
-// 以下是欢迎语
-// ----------------------------------
-function welcometxmap() {
-    //请求数据
-    ipLoacation = window.saveToLocal.get('ipLocation');
-    if (ipLoacation) {
-        // 使用 ipLocation
-    } else {
-        // 数据已过期或不存在
-        var txkey = 'ET6BZ-DDXEN-JRBFT-SZEUP-WBLXS-V7FGJ';
-        var script = document.createElement('script');
-        var url = `https://apis.map.qq.com/ws/location/v1/ip?key=${txkey}&output=jsonp`;
-        script.src = url;
-        window.QQmap = function (data) {
-            ipLoacation = data;
-            // 将数据保存到 localStorage，过期时间设置为 1 天
-            window.saveToLocal.set('ipLocation', ipLoacation, 1);
-            document.body.removeChild(script);
-            delete window.QQmap;
-        };
-        document.body.appendChild(script);
-    }
-    showWelcome();
-}
-function getDistance(e1, n1, e2, n2) {
-    const R = 6371
-    const { sin, cos, asin, PI, hypot } = Math
-    let getPoint = (e, n) => {
-        e *= PI / 180
-        n *= PI / 180
-        return { x: cos(n) * cos(e), y: cos(n) * sin(e), z: sin(n) }
-    }
 
-    let a = getPoint(e1, n1)
-    let b = getPoint(e2, n2)
-    let c = hypot(a.x - b.x, a.y - b.y, a.z - b.z)
-    let r = asin(c / 2) * 2 * R
-    return Math.round(r);
-}
 
-function showWelcome() {
 
-    let dist = getDistance(114.305000, 30.592800, ipLoacation.result.location.lng, ipLoacation.result.location.lat);
-    let pos = ipLoacation.result.ad_info.nation;
-    let ip;
-    let posdesc;
+// 史山一坨
 
-    //根据国家、省份、城市信息自定义欢迎语
-    //海外地区不支持省份及城市信息
-    switch (ipLoacation.result.ad_info.nation) {
-        case "日本":
-            posdesc = "よろしく，一起去看樱花吗";
-            break;
-        case "美国":
-            posdesc = "Make America Great Again!";
-            break;
-        case "英国":
-            posdesc = "想同你一起夜乘伦敦眼";
-            break;
-        case "俄罗斯":
-            posdesc = "干了这瓶伏特加！";
-            break;
-        case "法国":
-            posdesc = "C'est La Vie";
-            break;
-        case "德国":
-            posdesc = "Die Zeit verging im Fluge.";
-            break;
-        case "澳大利亚":
-            posdesc = "一起去大堡礁吧！";
-            break;
-        case "加拿大":
-            posdesc = "拾起一片枫叶赠予你";
-            break;
-        case "南极洲":
-            posdesc = "南极洲的风很大，你一定记得要带伞！";
-            break;
-        case "巴西":
-            posdesc = "巴西足球";
-            break;
-        case "加拿大":
-            posdesc = "加拿大不大";
-            break;
-        case "中国":
-            pos = ipLoacation.result.ad_info.province + " " + ipLoacation.result.ad_info.city;
-            switch (ipLoacation.result.ad_info.province) {
-                case "北京市":
-                    pos = "北京市";
-                    posdesc = "北——京——欢迎你~~~";
-                    break;
-                case "天津市":
-                    pos = "天津市";
-                    posdesc = "讲段相声吧。";
-                    break;
-                case "重庆市":
-                    pos = "重庆市";
-                    posdesc = "高德地图:已到达重庆，下面切换百度地图导航。百度地图：已到达重庆，下面切换高德地图导航。"
-                    break;
-                case "河北省":
-                    posdesc = "山势巍巍成壁垒，天下雄关。铁马金戈由此向，无限江山。";
-                    break;
-                case "山西省":
-                    posdesc = "展开坐具长三尺，已占山河五百余。";
-                    break;
-                case "内蒙古自治区":
-                    posdesc = "天苍苍，野茫茫，风吹草低见牛羊。";
-                    break;
-                case "辽宁省":
-                    posdesc = "我想吃烤鸡架！";
-                    break;
-                case "吉林省":
-                    posdesc = "状元阁就是东北烧烤之王。";
-                    break;
-                case "黑龙江省":
-                    posdesc = "哈尔滨红肠";
-                    break;
-                case "上海市":
-                    pos = "上海市";
-                    posdesc = "众所周知，中国只有两个城市。";
-                    break;
-                case "江苏省":
-                    switch (ipLoacation.result.ad_info.city) {
-                        case "南京市":
-                            posdesc = "欢迎来自安徽省南京市的小伙伴。";
-                            break;
-                        case "苏州市":
-                            posdesc = "上有天堂，下有苏杭。";
-                            break;
-                        default:
-                            posdesc = "散装是必须要散装的。";
-                            break;
-                    }
-                    break;
-                case "浙江省":
-                    posdesc = "东风渐绿西湖柳，雁已还人未南归。";
-                    break;
-                case "安徽省":
-                    posdesc = "蚌埠住了，芜湖起飞。";
-                    break;
-                case "福建省":
-                    posdesc = "井邑白云间，岩城远带山。";
-                    break;
-                case "江西省":
-                    posdesc = "落霞与孤鹜齐飞，秋水共长天一色。";
-                    break;
-                case "山东省":
-                    posdesc = "遥望齐州九点烟，一泓海水杯中泻。";
-                break;
-                case "湖北省":
-                switch (ipLoacation.result.ad_info.city) {
-                    case "武汉市":
-                        posdesc = "哟，我也住在武汉市。大江大河大武汉，走，吃热干面去！";
-                        break;
-                    case "咸宁市":
-                        posdesc = "我老家在咸宁。";
-                        break;
-                    default:
-                        posdesc = "老板，来碗热干面！";
-                        break;
-                }
-                    break;
-                case "湖南省":
-                    posdesc = "74751，长沙斯塔克。";
-                    break;
-                case "广东省":
-                    posdesc = "老板来两斤福建人。";
-                    break;
-                case "广西壮族自治区":
-                    posdesc = "桂林山水甲天下。";
-                    break;
-                case "海南省":
-                    posdesc = "朝观日出逐白浪，夕看云起收霞光。";
-                    break;
-                case "四川省":
-                    posdesc = "康康川妹子。";
-                    break;
-                case "贵州省":
-                    posdesc = "茅台，学生，再塞200。";
-                    break;
-                case "云南省":
-                    posdesc = "玉龙飞舞云缠绕，万仞冰川直耸天。";
-                    break;
-                case "西藏自治区":
-                    posdesc = "躺在茫茫草原上，仰望蓝天。";
-                    break;
-                case "陕西省":
-                    posdesc = "来份臊子面加馍。";
-                    break;
-                case "甘肃省":
-                    posdesc = "羌笛何须怨杨柳，春风不度玉门关。";
-                    break;
-                case "青海省":
-                    posdesc = "牛肉干和老酸奶都好好吃。";
-                    break;
-                case "宁夏回族自治区":
-                    posdesc = "大漠孤烟直，长河落日圆。";
-                    break;
-                case "新疆维吾尔自治区":
-                    posdesc = "驼铃古道丝绸路，胡马犹闻唐汉风。";
-                    break;
-                case "台湾省":
-                    posdesc = "我在这头，大陆在那头。";
-                    break;
-                case "香港特别行政区":
-                    pos = "香港特别行政区";
-                    posdesc = "永定贼有残留地鬼嚎，迎击光非岁玉。";
-                    break;
-                case "澳门特别行政区":
-                    pos = "澳门特别行政区";
-                    posdesc = "性感荷官，在线发牌。";
-                    break;
-                default:
-                    posdesc = "社会主义大法好。";
-                    break;
-            }
-            break;
-        default:
-            posdesc = "带我去你的国家逛逛吧。";
-            break;
-    }
 
-    //判断时间
-    let timeChange;
-    let date = new Date();
-    if (date.getHours()>= 5 && date.getHours() < 11) timeChange = "<span>上午好</span>，一日之计在于晨";
-    else if (date.getHours()>= 1 && date.getHours() < 13) timeChange = "<span>中午好</span>，开——饭——了——";
-    else if (date.getHours() >= 13 && date.getHours() < 15) timeChange = "<span>下午好</span>，懒懒地睡个午觉吧！";
-    else if (date.getHours() >= 15 && date.getHours() < 16) timeChange = "<span>下午三点了</span>，上课摸鱼 ING...";
-    else if (date.getHours() >= 16 && date.getHours() < 19) timeChange = "<span>夕阳无限好！</span>";
-    else if (date.getHours() >= 19 && date.getHours() < 24) timeChange = "<span>晚上好</span>，我要写作业了……";
-    else timeChange = "都几点了，还在熬夜？";
-
-    //自定义文本需要放的位置
-    document.getElementById("welcome-info").innerHTML = `欢迎来自<span>${pos}</span>的小伙伴，${timeChange}<br>你距我约有<span>${dist}</span>公里，${posdesc}`;
-
-    if (sessionStorage.getItem("popCookieWindow") != "0") {
-        setTimeout(function () {
-            Snackbar.show({
-                text: 'INFO 本站使用 Cookie 和本地 会话存储 保证浏览体验和网站统计',
-                pos: 'top-right',
-                actionText: "查看博客声明",
-                onActionClick: function (element) {
-                    window.open("/license")
-                },
-            })
-        }, 3500)
-    }
-    //不在弹出Cookie提醒
-    sessionStorage.setItem("popCookieWindow", "0");
-    
-    
-    let referrer = document.referrer || ' ? ? ? ';
-    let domain = referrer ? referrer.split("://")[1] : ' ? ? ? ';
-    domain = domain ? domain.split("/")[0] : ' ? ? ? ';
-    // 如没有来源，则修改为？？？
-    if (document.referrer==undefined||document.referrer.indexOf("www.travellings.cn")!=-1||document.referrer.indexOf("www.travellings.cn")!=-1)
-        { 
-            // 康康是不是来自开往的
-            Snackbar.show({
-                text: '欢迎来自 开往 的穿梭者！',
-                pos: 'top-right',
-                showAction: false,
-            })
-        } else {
-            setTimeout(function () { // 康康是不是来自其他网站
-                if(domain=='blog.admincmd.xyz') {
-                    console.log('由本站主站站点访问')
-                } else if(domain=='vercel-blog.admincmd.xyz') {
-                    console.log('由本站镜像站点访问') // 已弃用此域名
-                } else if(domain=='netlify-blog.admincmd.xyz') {
-                    console.log('由本站镜像站点访问')
-                } else if(domain=='cf-blog.admincmd.xyz') {
-                    console.log('由本站镜像站点访问')
-                } else if(domain=='github-blog.admincmd.xyz') {
-                    console.log('由本站镜像站点访问')
-                } else if(domain=='localhost:4000') {
-                    console.log('由本站调试环境访问')
-                } else if (domain == ' ? ? ? ') { 
-                    console.log('由外部站点访问')
-                    if(domain==' ? ? ? ') {
-                        domain = pos;
-                        Snackbar.show({
-                            text: `欢迎从来自 ${domain} 的访客访问本站！`,
-                            pos: 'top-center',
-                            actionText: "",
-                            onActionClick: function (element) {
-                                window.open("")
-                            },
-                        });
-                    } else {
-                        Snackbar.show({
-                            text: `欢迎从来自 ${domain} 的访客访问本站！`,
-                            pos: 'top-center',
-                            actionText: "",
-                            onActionClick: function (element) {
-                                window.open("")
-                            },
-                        });
-                    }
-    
-                    }
-                    
-            },2500)
-        }
-    
-}
+// const ap = new APlayer({
+//     container: document.getElementById('aplayer'),
+//     fixed: true,
+//     audio: [{
+//         name: "愿爱无忧",
+//         artist: "恩几",
+//         url: "file:///G:/XIAKE/鲍比达%20-%20菩提树.mp3",
+//         cover: "",
+//     }]
+//  });
