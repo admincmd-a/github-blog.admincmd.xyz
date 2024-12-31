@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Almm'; /* 自定义字体名称 */
+    src: url('/font/almm.woff2') format('woff2');
+}
+
+body {
+    font-family: 'Almm', sans-serif; /* 应用自定义字体 */
+}

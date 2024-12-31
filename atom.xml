@@ -6,7 +6,7 @@
   <link href="https://blog.admincmd.xyz/atom.xml" rel="self"/>
   
   <link href="https://blog.admincmd.xyz/"/>
-  <updated>2024-12-11T16:06:23.436Z</updated>
+  <updated>2024-12-22T07:47:29.723Z</updated>
   <id>https://blog.admincmd.xyz/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://blog.admincmd.xyz/post/f483a3a94892/index.html"/>
     <id>https://blog.admincmd.xyz/post/f483a3a94892/index.html</id>
     <published>2024-12-11T13:56:56.000Z</published>
-    <updated>2024-12-11T16:06:23.436Z</updated>
+    <updated>2024-12-22T07:47:29.723Z</updated>
     
-    <content type="html"><![CDATA[<meta name='description' content='本文讲如何在使用锐捷云课堂中解除USB禁用'><!-- <div class="note default simple"></div> --><div class="note warning modern"><p>注意下老师</p></div><div class="note warning modern"><p>来自 UP 的警告：被老师发现后果自负，我不承担任何责任 <del>我们老师看到玩植物大战叼尸都不管</del></p></div><div class="note danger modern"><p>可能被老师发现并没收U盘</p></div><div class="note info modern"><p>肥肠抱歉，由于不可抗力因素，本文配不了图片<!--，所以在网上找的，侵删--></p></div><h2 id="开头"><a href="#开头" class="headerlink" title="开头"></a>开头</h2><p>上初中了，微机室的电脑换了，换了个叫锐捷云的系统<del>居然是虚拟机：½Ýüꁛ❿ꃩꋥ&#x3D;Š®訲髾￠</del><br>不过研究了一下，发现客户端上有 4 个U口，但是不认u盘，推测应该是管理系统整的，因为有个<em>您的 USB 已被禁用</em>的消息<br>于是就开始反查，原来极域把密码丢到注册表里，于是就在注册表里开始找 RCC 这个关键词，</p><p>然后查到了，配置文件夹的位置：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\RCC-Guest-Tool\</span><br></pre></td></tr></table></figure><p>这个文件夹里有相当一部分是INI配置文件<br>这个文件夹里确实有密码，但是是类似 MD5 的写法，无法直接写进去关闭程序<br>这些配置都没有保护，直接让系统已普通权限保存，没有保护，没有大权限，</p><p><del>把进程权限守得死死的，真不怕有人偷配置走了</del></p><p>除此以外，网上还说密码是锐捷的官网域名，测试了下，不行</p><p>于是想到直接删配置解决</p><p>这个方法可以解：</p><ul><li>USB禁用</li><li>老师远控</li></ul><p>不过解不了：</p><ul><li>上网问题</li></ul><h2 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h2><p>1.首先打开<code>此电脑</code>，打到<code>C 盘</code></p><p>2.双击打开<code>Windows</code>目录</p><p>3.找到<code>RCC-Guest-Tool</code>文件夹</p><div class="note simple"><p>貌似会有两个 RCC 开头的，建议全部按第 4 步处理</p></div><p>4.把文件夹删掉，要权限就继续</p><p>5.按<code>Ctrl</code> + <code>Alt</code> + <code>Del</code> 呼出安全选项，然后<code>注销</code></p><p>6.登录账户</p><hr><p>以下是别的东西：</p><ul><li>为啥学生端和教师端是捆绑的，配置文件一删窜出了个教师端</li></ul>]]></content>
+    <content type="html"><![CDATA[<meta name='description' content='本文讲如何在使用锐捷云课堂中解除USB禁用'><!-- <div class="note default simple"></div> --><div class="note warning modern"><p>注意下老师</p></div><div class="note warning modern"><p>来自 UP 的警告：被老师发现后果自负，我不承担任何责任 <del>我们老师看到玩植物大战叼尸都不管</del></p></div><div class="note danger modern"><p>可能被老师发现并没收U盘,并被当成走资派以████████████</p></div><div class="note info modern"><p>肥肠抱歉，由于不可抗力因素，本文配不了图片<!--，所以在网上找的，侵删--></p></div><h2 id="开头"><a href="#开头" class="headerlink" title="开头"></a>开头</h2><p>上初中了，微机室的电脑换了，换了个叫锐捷云的系统<del>居然是虚拟机：½Ýüꁛ❿ꃩꋥ&#x3D;Š®訲髾￠</del><br>不过研究了一下，发现客户端上有 4 个U口，但是不认u盘，推测应该是管理系统整的，因为有个<em>您的 USB 已被禁用</em>的消息<br>于是就开始反查，原来极域把密码丢到注册表里，于是就在注册表里开始找 RCC 这个关键词，</p><p>然后查到了，配置文件夹的位置：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\RCC-Guest-Tool\</span><br></pre></td></tr></table></figure><p>这个文件夹里有相当一部分是INI配置文件<br>这个文件夹里确实有密码，但是是类似 MD5 的写法，无法直接写进去关闭程序<br>这些配置都没有保护，直接让系统已普通权限保存，没有保护，没有大权限，</p><p><del>把进程权限守得死死的，真不怕有人偷配置走了</del></p><p>除此以外，网上还说密码是锐捷的官网域名，测试了下，不行</p><p>于是想到直接删配置解决</p><p>这个方法可以解：</p><ul><li>USB禁用</li><li>老师远控</li></ul><p>不过解不了：</p><ul><li>上网问题</li></ul><h2 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h2><p>1.首先打开<code>此电脑</code>，打到<code>C 盘</code></p><p>2.双击打开<code>Windows</code>目录</p><p>3.找到<code>RCC-Guest-Tool</code>文件夹</p><div class="note simple"><p>貌似会有两个 RCC 开头的，建议全部按第 4 步处理</p></div><p>4.把文件夹删掉，要权限就继续</p><p>5.按<code>Ctrl</code> + <code>Alt</code> + <code>Del</code> 呼出安全选项，然后<code>注销</code></p><p>6.登录账户</p><hr><p>以下是别的东西：</p><ul><li>为啥学生端和教师端是捆绑的，配置文件一删窜出了个教师端</li></ul>]]></content>
     
     
       
