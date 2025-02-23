@@ -8,10 +8,10 @@ const SETTING_MAIN_HTML = `
     <img src="/img/icon/pc.ico" alt="外观" height="50" width="50" class="setting-icon" />
     <span>字体</span>
 </a>
-<a href="javascript:SettingWin.aplayer()" class="setting-bottom" id="setting-dir-aplayer">
+<!--<a href="javascript:SettingWin.aplayer()" class="setting-bottom" id="setting-dir-aplayer">
     <i class="fa-brands fa-itunes-note"></i>
     <span>APlayer</span>
-</a>
+</a>-->
 <a href="javascript:SettingWin.user()" class="setting-bottom" id="setting-dir-user">
     <i class="fa-solid fa-user"></i>
     <span>自定义</span>
