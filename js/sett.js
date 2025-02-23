@@ -3,18 +3,69 @@
 const DEFAULT_FONT = "HYTMR";
 const DEFAULT_THEME = "pink";
 const DEFAULT_BLOG_THEME = "simple";
+const SETTING_MAIN_HTML = `
+<a href="javascript:SettingWin.font()" class="setting-bottom" id="setting-dir">
+    <img src="/img/icon/pc.ico" alt="外观" height="50" width="50" class="setting-icon" />
+    <span>字体</span>
+</a>
+<a href="javascript:SettingWin.aplayer()" class="setting-bottom" id="setting-dir-aplayer">
+    <i class="fa-brands fa-itunes-note"></i>
+    <span>APlayer</span>
+</a>
+<a href="javascript:SettingWin.user()" class="setting-bottom" id="setting-dir-user">
+    <i class="fa-solid fa-user"></i>
+    <span>自定义</span>
+</a>
+<a href="javascript:SettingWin.about()" class="setting-bottom" id="setting-dir">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>关于</span>
+</a>
+`;
+const SETTING_FONT_HTML = `
+                 <a class="setting-font-butt" href="javascript:setFont(\'DDJB\');"        style="font-family:\'DDJB\';!important;color:#000000"                                                       >  钉钉进步体 </a>
+<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'BWKS\');"        style="font-family:\'BWKS\';!important;color:#000000"                                                       > 方正北魏楷书_GBK </a>
+<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'HMBO\');"        style="font-family:\'HMBO\';!important;color:#000000"                                                       > 鸿蒙黑体 </a>
+<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'SHBO\');"        style="font-family:\'SHBO\';!important;color:#000000"                                                       > 思源黑体 </a>
+<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'FZXS\');"        style="font-family:\'FZXS\';!important;color:#000000"                                                       > 方正像素体 </a>
+<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'HMLI\');"        style="font-family:\'HMLI\';!important;color:#000000"                                                       > HarmonyOS Sans SC Light </a>
+<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'HMME\');"        style="font-family:\'HMME\';!important;color:#000000"                                                       > HarmonyOS Sans SC Medium </a>
+<span>    </span><a class="setting-font-butt" href='javascript:setFont(\'Source Sans\');' style="font-family:\'Source Sans\';!important;color:#000000"                                                > 网站默认 </a>
+<span>    </span><a class="setting-font-butt" href='javascript:setFont(\'main\');'        style='font-family:-apple-system, IBM Plex Mono ,monosapce,\'微软雅黑\';!important;color:#000000'>系统默认 </a>
+
+<div>
+    <p>
+    ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+    </p>
+</div>
+`;
+const SETTING_ABOUT_HTML = `
+Hexo - Butterfly
+
+网页控制面板
+<a href="/about/">关于</a>
+`;
+const SETTING_USER_HTML = `
+<span class="h2">Cookis 与 localStorage</span>
+<br />
+<a id="setting-bottom" href="javascript:clearCookies();">清除所有 Cookie 和 localStorage</a>
+<div class="note warning modern">
+    <p>按下此按钮将清除您的自定义设置，并标记为新访客，并刷新页面。</p>
+</div>
+`;
 
 let DIV_HTML = ``;
-//if (Storage.get('font')) {setFont(Storage.get('font') || DEFAULT_FONT);}
-//else {setFont(DEFAULT_FONT);}
 
- // 从localStorage中获取字体参数，若无则使用默认字体
+
+
+// 从localStorage中获取字体参数，若无则使用默认字体
 document.getElementById("sett").style.display = "none";
 document.getElementById("sett").innerHTML = `
-                <span class="setting-title">控制面板</span>
-                <a class="exit" href="javascript:SettingWin.exit();">   X   </a>
-                <a class="top" href="javascript:SettingWin.exit();">  ←  <!--🔙--></a>
-                <span class="setting-2title">调整网页的设置</span>
+                <div class="settingtitle" id="settingtitle">
+                    <span id="setting-title" class="setting-title">控制面板</span>
+                    <span id="setting-2title" class="setting-2title">调整网页的设置</span>
+                    <a class="exit" href="javascript:SettingWin.exit();">   X   </a>
+                    <a class="top" href="javascript:SettingWin.topWin();">  ←  <!--🔙--></a>
+                </div>
                 <div class="setting-div" id="setting-div">
 
                 </div>
@@ -30,67 +81,105 @@ function setFont(font) {
     }
     document.body.style.fontFamily = font; // 根据传入的font参数，动态修改body的字体样式
     localStorage.setItem('font', font); // 将字体参数保存到localStorage
-    Snackbar.show({
-        text: '已为您切换字体！',
-        pos: 'top-right',
-        showAction: false
-    });
+    // Snackbar.show({
+    //     text: '已为您切换字体！',
+    //     pos: 'top-right',
+    //     showAction: false
+    // });
 }
 
+
+// 样式常量提取
+const BLUR_STYLE = "filter: blur(5px); pointer-events: none; opacity: 0.7;";
+const RESET_STYLE = "filter: none; pointer-events: auto; opacity: 1;";
 
 const SettingWin = {
-    exit: function() {
-        document.getElementById("sett").style.display = "none";// 隐藏设置面板
-        document.body.classList.remove('blur-and-disable');
-    },
-    main: function() {
-        SettingWin.setDiv(`
-                <a href="javascript:SettingWin.font()" class="setting-dir" id="setting-dir">
-                    <img src="/img/icon/pc.ico" alt="外观" height="50" width="50" class="setting-icon" />
-                    <span>字体</span>
-                </a>
-                <a href="javascript:SettingWin.aplayer()" class="setting-dir" id="setting-dir-aplayer">
-                    <i class="fa-brands fa-itunes-note"></i>
-                    <span>APlayer</span>
-                </a>
-                <a href="javascript:SettingWin.user()" class="setting-dir" id="setting-dir-user">
-                    <i class="fa-solid fa-user"></i>
-                    <span>自定义</span>
-                </a>
-                <a href="javascript:SettingWin.font()" class="setting-dir" id="setting-dir">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>关于</span>
-                </a>
-                `);
-    },
-    font: function() {
-        SettingWin.setDiv(`
-        <a href="javascript:setFont(\'DDJB\');" style="font-family:\'DDJB\'important;color:#000000"> 【 钉钉进步体】</a>
-        <span> | </span> <a class="setting-font-butt" href="javascript:setFont(\'BWKS\');" style="font-family:\'BWKS\';important;color:#000000"> 【方正北魏楷书_GBK】</a>
-        <span> | </span> <a class="setting-font-butt" href="javascript:setFont(\'HMBO\');" style="font-family:\'HMBO\';important;color:#000000"> 【鸿蒙黑体】</a>
-        <span> | </span> <a class="setting-font-butt" href="javascript:setFont(\'SHBO\');" style="font-family:\'SHBO\';important;color:#000000"> 【思源黑体】</a>
-        <span> | </span> <a class="setting-font-butt" href="javascript:setFont(\'FZXS\');" style="font-family:\'FZXS\';important;color:#000000"> 【方正像素体】</a>
-        <span> | </span> <a class="setting-font-butt" href="javascript:setFont(\'HMLI\');" style="font-family:\'HMLI\';important;color:#000000"> 【HarmonyOS Sans SC Light】</a>
-        <span> | </span> <a class="setting-font-butt" href="javascript:setFont(\'HMME\');" style="font-family:\'HMME\';important;color:#000000"> 【HarmonyOS Sans SC Medium】</a>
-        <span> | </span> <a class="setting-font-butt" href='javascript:setFont(\'Source Sans\');' style="font-family:\'Source Sans\';important;color:#000000"> 【网站默认】</a>
-        <span> | </span> <a class="setting-font-butt" href='javascript:setFont(\'main\');' style='font-family:-apple-system, IBM Plex Mono ,monosapce,\'微软雅黑\', sans-serif;'>【系统默认】</a>
-        `)
-    },
+    // 属性定义
+    currentDir: "",  // 修复非法 this:dir 语法
     
+    // 主路由方法
+    topWin() {  // 更符合驼峰命名规范
+        if (this.currentDir === SETTING_MAIN_HTML) {
+            this.exit();
+        } else {
+            switch (this.currentDir) {
+                default:
+                    this.main();
+                    break;
+            }
+        }
+    },
 
-    setDiv: function(DIV_HTML) {
-        document.getElementById("setting-div").innerHTML = DIV_HTML
-        document.getElementById("sett").style.display = "";
+    // 退出逻辑
+    exit() {
+        document.getElementById("sett").style.display = "none";
+        document.getElementById("web").style = RESET_STYLE;  // 明确样式重置
+    },
 
-        // 模糊其他
-        document.body.classList.add('blur-and-disable');
-        // 排除 #sett 元素自身
-        sett.classList.remove('blur-and-disable');
+    // 主面板
+    main() {
+        this.setDiv(SETTING_MAIN_HTML);
+        this.setTitle("控制面板", "调整网页的设置");
+    },
 
-        this.html = DIV_HTML;
+    // 字体设置
+    font() {
+        this.setDiv(SETTING_FONT_HTML);  // 统一使用this调用
+        this.setTitle("字体", "该设置即时生效，设置针对所有显示文本(代码块等特殊位置除外)。");
+    },
+
+    user() {
+        this.setDiv(SETTING_USER_HTML);
+        this.setTitle("隐私设置管理", "管理您的 Cookie 和 localStorage。")
+    },
+
+    // 关于页面
+    about() {
+        this.setDiv(SETTING_ABOUT_HTML);  // 修复 this.this 错误
+        this.setTitle("关于", "");
+    },
+
+    // 动态加载设置内容
+    setDiv(divHtml) {
+        const container = document.getElementById("setting-div");
+        container.innerHTML = divHtml;
+        
+        document.getElementById("sett").style.display = "block";
+        document.getElementById("web").style = BLUR_STYLE;  // 使用常量
+        
+        this.currentDir = divHtml;  // 属性名同步修改
+    },
+
+    // 设置标题
+    setTitle(title, subtitle) {
+        const titleEl = document.getElementById("setting-title");
+        const subtitleEl = document.getElementById("setting-2title");
+        
+        titleEl.textContent = title;        // 修复错误的赋值方式
+        subtitleEl.textContent = subtitle;  // 使用textContent代替直接赋值
     }
-}
+};
 
+function clearCookies() {
+    var r=confirm("确定要清除所有 Cookie 和 localStorage 吗？");
+    if (r==true) {
+        localStorage.clear();
+        location.reload();
+        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+        if (keys) {
+            for(var i = keys.length; i--;) {
+                document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
+            }
+        }
+    } else {
+        Snackbar.show({
+            text: '操作已取消。',
+            pos: 'top-right',
+            action: 2000,
+        });
+    }
+    
+}
 
 //     console.log("WindowsSetting");
 //     document.getElementById("setting").style.display = `

@@ -1,6 +1,7 @@
 // 主 JS 文件
 /*
 */
+debugger;
 
 const now = new Date();// 获取当前日期、时间
 const year = now.getFullYear();
@@ -10,7 +11,7 @@ const md = `${month}-${day}`; // 使用模板字符串
 // 检查今日是否已经弹窗
 const todayKey = `${year}-${month}-${day}`;
 const hasShownToday = localStorage.getItem(todayKey);
-const today = new Date();
+const today = now;
 // 获取今天的农历日期
 const lunarDate = LunarCalendar.solarToLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
 const nowZhData = `${today.getMonth() + 1}-${today.getDate()}`// 换为农历
@@ -82,35 +83,47 @@ console.log(`
 ...................................................................................................................................................................
 ...................................................................................................................................................................
 `)
-   
-// document.getElementById("sett").style.display = "none";
 // ----------------------
 // HTTP透明端口转发：80 8080 8880 2052 2082 2086 2095
 // HTTPS隧道端口转发：443 2053 2083 2087 2096 8443
 // HTTP/HTTPS端口隧道转发，但以下端口禁用CDN缓存：2052 2053 2082 2083 2086 2087 2095 2096 8880 8443
 
-// 找到所有具有 "post" 的 ID 的链接
-// const links = document.querySelectorAll('a[id^="post"]');
+/*
+text 	null 	The text to displae inside the notification.
+textColor 	#FFFFFF 	Text color of the notification text. Default is white.
+pos 	bottom-left 	The position the notification will show. Refer to the examples above for possible positions.
+customClass 	null 	Add a custom class to the notification for custom styling.
+width 	auto 	Width of the notification. Used to shrink/expand window as you wish.
+showAction 	true 	Boolean to show the action buton or not.
+actionText 	Dismiss 	Text to display as the action button.
+actionTextAria 	Dismiss, Description for Screen Readers 	Text for screen readers.
+alertScreenReader 	false 	Determines if screen readers will annouce the snackbar message.
+actionTextColor 	#4CAF50 	Text color of the action button.
+backgroundColor 	#323232 	Background color of the notification window.
+duration 	5000 	Time in milliseconds the notification is displayed before fading out.
+onActionClick 	function(ele) 	Default action closes the notification.
+onClose 	function(ele) 	Fires when the notification has been closed.
 
-// 遍历每一个链接并修改其 href
-// links.forEach(link => {
-//     link.href = "https://blog.admincmd.xyz/url.html?url=" + encodeURIComponent(link.href);
-// });
-
-
-// document.getElementById("sett").style.display="none";//隐藏元素
-// document.getElementById("font-sett").style.display="none";//隐藏元素
-
-
-// 欢迎语，cookie 提醒 --------------------------------------------
-// 首次访问，弹出Cookie提醒
+text null 通知内要显示的文本。
+textColor #FFFFFF 通知文本的颜色。 默认为白色。
+pos 左下角 通知将显示的位置。 有关可能的位置，请参阅上面的示例。
+customClass null 为通知添加自定义样式的自定义类。
+width auto 通知的宽度。 根据需要缩小/展开窗口。
+showAction true 是否显示操作按钮的布尔值。
+actionText 取消 作为操作按钮显示的文本。
+actionTextAria 取消，屏幕阅读器说明 屏幕阅读器文本。
+alertScreenReader false 决定屏幕阅读器是否会宣布小工具栏信息。
+actionTextColor #4CAF50 操作按钮的文本颜色。
+backgroundColor #323232 通知窗口的背景颜色。
+duration 5000 通知淡出前的显示时间（毫秒）。
+onActionClick function(ele) 默认动作为关闭通知。
+onClose function(ele) 关闭通知时触发。
+*/
 
 // 邢昭博是个大傻逼，他居然把自己的名字写成了邢昭博，这简直就是个笑话。(AI 生成)
 
-
-    
-
-    
+// 欢迎语，cookie 提醒 --------------------------------------------
+// 首次访问，弹出Cookie提醒    
 console.log(`农历年份: ${lunarDate.lunarYear}`);
 console.log(`农历月份: ${lunarDate.lunarMonth}`);
 console.log(`农历日期: ${lunarDate.lunarDay}`);
@@ -129,9 +142,8 @@ try {
         case "12-13":
             document.getElementsByTagName("html")[0].setAttribute("style","filter: grayscale(100%);");
             DText = "请起立默哀 30 秒";
-            Text = "勿忘国耻，振兴中华！\n <br /> 今天是南京大屠杀" + (year - 1937) + " 年纪念日、国家公祭日 \n <br /> 为在南京大屠杀中被杀害的平民默哀，铭记历史，珍视和平，绝不让这样的悲剧再次发生。";
+            Text = `勿忘国耻，振兴中华！\n <br /> 今天是南京大屠杀 ${year - 1937} 年纪念日、国家公祭日 \n <br /> 为在南京大屠杀中被杀害的平民默哀，铭记历史，珍视和平，绝不让这样的悲剧再次发生。`;
             break;
-            // UP 祝你元旦快乐（四不四有点晚呀）
         // 节假日 --------------
         case "1-1":
             DText = "元旦快乐";
@@ -148,13 +160,23 @@ try {
             DText = "妇女节";
             Text = "各位女神们，妇女节快乐！";
             break;
+        case "4-1":
+            // 随机抽取一句
+            const randomIndex = Math.floor(Math.random() * phrases.length);
+            DText = phrases[randomIndex];
+            Text = "祝祝祝祝祝 UP 生日快乐！";
+            break;
+        case "4-5":
+            DText = "清明安康"
+            Text = ""
+            break;
         case "5-1":
             DText = "劳动节快乐！"
             Text = "为各行各业的辛勤工作劳动人民致敬！"
             break;
         case "5-4":
             DText = "五四青年节";
-            Text = "为百年前那些有思想政治觉悟，拥护中国共产党，追求无产阶级、共产主义、马克思主义的青年们致敬！";
+            Text = "为百年前那些有思想政治觉悟，追求无产阶级、共产主义、马克思主义的青年们致敬！";
             break;
         case "6-1":
             DText = "各位小朋友们，儿童节快乐！";
@@ -172,22 +194,11 @@ try {
             DText = `日本鬼子已宣布无条件投降 ${year - 1945} 年了！`
             Text = "历史老师：标志着二战结束。"
             break;
-        case "4-1":
-            // 随机抽取一句
-            const randomIndex = Math.floor(Math.random() * phrases.length);
-            DText = phrases[randomIndex];
-            Text = "祝祝祝祝祝 UP 生日快乐！";
-            break;
-        case "4-5":// 清明节靠北斗方向定义,一般在4月5日,
-            DText = "清明安康"
-            Text = ""
-            break;
-    
         default:
             break;
     }
     switch (lunarDateChineseNY) { // 农历判断
-        case ["腊月廿九","腊月三十"]:// 偶尔除夕会在腊月廿九，所以也要做判断
+        case ["腊月廿九","腊月三十"]:// 偶尔除夕会在腊月廿九，所以也要做判断,反正也隔不了几天
             DText = `${lunarDate.getYear() + 1} 年新年快乐！`
             Text = ``
             break;
@@ -214,74 +225,32 @@ try {
         default:
             break;
     } // 农历判断
-    if (DText == "0") return; // 如果没有匹配的节日，直接返回
-    console.log(DText);
-    console.log(Text);
-    if (hasShownToday) {
-        Snackbar.show({
-            text: DText,
-            actionText: ""
-        })
-        return;
-    } // 如果今天已经弹过窗，则改为弹消息框
-     // 其他不弹窗的情况放在这里
-    if (isMobile()) { // 判断是否是移动端,弹消息框,若为PC端则弹窗
-        Snackbar.show({
-            text: DText,
-            actionText: ""
-        })
-        return;
+    if (DText == "0") {// 其他不弹窗的情况放在这里
+        // 如果没有匹配的节日，直接返回
     } else {
-    document.getElementById("timeWin").innerHTML = 
-    `
-        <div class="win" id="win">
-            <p style="font-size:30px;color:#2F7AA1;text-align: center;">${DText}</p>
-            <p style="font-size:16px;color:#003152;text-align: center;">${Text}</p>
-            <br />
-            <a class="closeWinbox" href="javascript:closeWindows()" id="closeWin">关闭</a>
-            
-            <style>
-                a.winbox-btn {
-                    background-color: #10A7E8;
-                    bottom:30px;
-                    left:44%;
-                }
-                a.winbox-btn {
-                  padding-top: 2%;
-                  padding-bottom: 2%;
-                  padding-right:  4%;
-                  padding-left:  4%;
-                }
-                div.win {
-                    position:fixed;
-                    top:35%;
-                    right:25%;
-                    z-index:25;
-                    border-width:2px;
-                    border-color:#7F7E84;
-                    border-style:solid;
-                    background-color:#F8F3ED; /*背景色*/
-                    width:50%;
-                    border-radius: 25px; /*圆角*/
-                }
-                a.closeWinbox {
-                    font-size:16px;
-                    height:60px;
-                    width:90px;
-                    color:#FFFFFF;
-                    background-color:#2F7AA1;
-                    border-radius:10px;
-                    text-align:center;
-                    line-height:30px;
-                    display:block;
-                    margin:0 auto;
-                    margin-top:20px;
-                    line-height: 58px;
-                }
-            </style>
-            <br />
-        </div>
-    `;
+        console.log(DText);
+        console.log(Text);
+        if (isMobile()) {
+            // 判断是否是移动端,弹消息框,若为PC端则弹窗
+            Snackbar.show({
+                text: `${DText}<br /><br />${Text}`,
+                actionText: "",
+                duration: 10000,
+            })
+        } else {
+            // 模糊其他
+            document.getElementById("web").style = "filter: blur(5px);pointer-events: none;opacity: 0.7;";/* 定义模糊和禁用的类 *//*全局模糊和禁用*/
+            document.getElementById("timeWin").innerHTML = 
+            `
+            <div class="win" id="win">
+                <p style="font-size:30px;color:#2F7AA1;text-align: center;">${DText}</p>
+                <p style="font-size:16px;color:#003152;text-align: center;">${Text}</p>
+                <br />
+                <a class="closeWinbox" href="javascript:closeWindows()" id="closeWin">关闭</a>
+                <br />
+            </div>
+            `;
+        }
     }
     // 设置今天已显示
     localStorage.setItem(todayKey, 'shown');
@@ -289,23 +258,29 @@ try {
     console.error('创建节日窗口时出错:', error);
 }
 
+function closeWindows() {
+    document.getElementById("win").style.display = "none";
+    document.getElementById("web").style = "";// 取消模糊
+    document.web.classList.remove('blur-and-disable');
+}
+
 function isMobile() {// 判断是否是移动端
-    if(window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
-    return true; // 移动端
+    if (window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+        return true; // 移动端
     } else {
-    return false; // PC端
+        return false; // PC端
     }
 }
 
 // 以下是欢迎语
-// ----------------------------------
+// -----------------------------------------------------------------------------
 // 2024.12.21 修正了无法获取 KEY 的问题，将欢迎语显示合并，如果在武汉，那就是UP的老乡
+// 2025.2.23 修正了在没有 Cookie 的情况下，无法显示欢迎语的问题
+
 
 //请求数据
 ipLoacation = window.saveToLocal.get('ipLocation');
-if (ipLoacation) {
-    // 使用 ipLocation
-} else {
+if (ipLoacation == undefined) {
     // 数据已过期或不存在
     var txkey = 'ET6BZ-DDXEN-JRBFT-SZEUP-WBLXS-V7FGJ';
     // ttttttttttttttttttt
@@ -320,10 +295,11 @@ if (ipLoacation) {
         delete window.QQmap;
     };
     document.body.appendChild(script);
+} else {
+    // 使用 ipLocation
 }
 
-
-function getDistance(e1, n1, e2, n2) {
+function getDistanceAMLS(e1, n1, e2, n2) {
     const R = 6371
     const { sin, cos, asin, PI, hypot } = Math
     let getPoint = (e, n) => {
@@ -338,15 +314,13 @@ function getDistance(e1, n1, e2, n2) {
     let r = asin(c / 2) * 2 * R
     return Math.round(r);
 }
-
-
-
-let dist = getDistance(114.305000, 30.592800, ipLoacation.result.location.lng, ipLoacation.result.location.lat);
+let dist = getDistanceAMLS(114.305000, 30.592800, ipLoacation.result.location.lng, ipLoacation.result.location.lat)
 let pos = ipLoacation.result.ad_info.nation;
 let ip = ipLoacation.result.ip;
 let ipDZ;
 let posdesc;//要显示的信息
 let ass = "小伙伴";
+
 //根据国家、省份、城市信息自定义欢迎语
 //海外地区不支持省份及城市信息
 switch (ipLoacation.result.ad_info.nation) {
@@ -542,14 +516,14 @@ welcomeInfoElement.innerHTML = `欢迎来自<span>${pos}</span>的${ass}，${tim
 if (sessionStorage.getItem("popCookieWindow") != "0") {
     setTimeout(function () {
         Snackbar.show({
-            text: 'INFO 本站使用 Cookie 和本地 会话存储 保证浏览体验和网站统计',
+            text: '本站使用 Cookie 和 本地会话存储 保证浏览体验和网站统计',
             pos: 'top-right',
             actionText: "查看博客声明",
             onActionClick: function (element) {
                 window.open("/license")
             },
         })
-    }, 3500)
+    }, 4500)
 }
 //不在弹出Cookie提醒
 sessionStorage.setItem("popCookieWindow", "0");
@@ -559,38 +533,31 @@ let referrer = document.referrer || ' ? ? ? ';
 let domain = referrer ? referrer.split("://")[1] : ' ? ? ? ';
 domain = domain ? domain.split("/")[0] : ' ? ? ? ';
 setTimeout(function () { // 康康是不是来自其他网站
-    if(domain=='blog.admincmd.xyz') {
-        console.log('由本站主站站点访问')
-    } else if(domain=='netlify-blog.admincmd.xyz') {
-        console.log('由本站镜像站点访问')
-    } else if(domain=='cf-blog.admincmd.xyz') {
-        console.log('由本站镜像站点访问')
-    } else if(domain=='github-blog.admincmd.xyz') {
-        console.log('由本站镜像站点访问')
-    } else if (domain == 'www.travelling.cn') {
-        // 康康是不是来自开往的
-        Snackbar.show({
-            text: '欢迎来自开往的穿梭者！',
-            pos: 'top-center',
-        })
-    } else if (domain == 'admincmd.xyz') {
-        Snackbar.show({
-            text: 'Welcome',
-            pos: 'top-center',
-        })
-    } else if (domain == ' ? ? ? ') { 
-        console.log('由外部站点访问')
-        if(domain==' ? ? ? ') {
-            domain = pos;// 若来源为空，则使用定位信息
+    switch (domain) {
+        case 'www.travellings.cn':
             Snackbar.show({
-                text: `欢迎从来自 ${domain} 的访客访问本站！`,
+                text: '欢迎来自开往的穿梭者！',
                 pos: 'top-center',
-                actionText: "",
-                onActionClick: function (element) {
-                    window.open("")
-                },
-            });
-        } else {
+            })
+            break;
+        case 'blog.admincmd.xyz':
+            console.log('由本站主站站点访问')
+            break;
+        case 'netlify-blog.admincmd.xyz':
+            console.log('由本站镜像站点访问')
+            break;
+        case 'cf-blog.admincmd.xyz':
+            console.log('由本站镜像站点访问')
+            break;
+        case ' ? ? ? ':
+            domain = pos;// 若来源为空，则使用定位信息
+            // Snackbar.show({
+            //     text: `欢迎从来自 ${domain} 的访客访问本站！`,
+            //     pos: 'top-center',
+            //     actionText: "",
+            // });
+            break;
+        default:
             console.warn('');
             Snackbar.show({// 如果有
                 text: `欢迎从来自 ${domain} 的访客访问本站！`,
@@ -600,21 +567,8 @@ setTimeout(function () { // 康康是不是来自其他网站
                     window.open("")
                 },
             });
-        }
-        
-    } else {
-        console.warn('');
-        Snackbar.show({// 如果有
-            text: `欢迎从来自 ${domain} 的访客访问本站！`,
-            pos: 'top-center',
-            actionText: "",
-            onActionClick: function (element) {
-                window.open("")
-            },
-        });
+            break;
     }
-    
-        
 },2500)
 
 
@@ -1176,30 +1130,6 @@ window.addEventListener("load", function() {
 
     // 这里可以执行相关的代码
 });
-
-// twikoo.init({}).then(function () {
-//     console.log("\n %c Twikoo af84efb %c http://twikoo.js.org \n", "color: #fadfa3; background: #030307; padding:5px 0;", "background: #fadfa3; padding:5px 0;");
-// }).catch(function(error) {
-//     console.error("初始化 Twikoo 发生错误:", error);
-//     Snackbar.show({
-//         text: '初始化 Twikoo 发生错误: ' + error,
-//         pos: 'top-right',
-//     })
-// }).onCommentLoaded(function () {
-//     console.log("评论已加载完毕");
-// }).catch(function (error) {
-//     console.error("评论加载失败:", error);
-//     Snackbar.show({
-//         text: '评论加载失败: ' + error,
-//         pos: 'top-right',
-//     })
-// });
-
-function closeWindows() {
-    document.getElementById("win").style.display = "none";
-    
-}
-
 /*
 // 创建一个新的AudioContext
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -1345,7 +1275,6 @@ function playDFH() {
 
 
 function playMUS(frequency) {
-    
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     var audioCtx = new AudioContext();
     var oscillator = audioCtx.createOscillator();
@@ -1386,7 +1315,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     if (!document.hidden) {
                         document.title = originalTitle; // 改回来
                     }
-                }, 2000); // 等待2秒
+                }, 2500); // 等待2.5秒
             }
         } catch (error) {
             console.error('标题更改过程中出错:', error);
