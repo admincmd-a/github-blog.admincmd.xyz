@@ -1,15 +1,15 @@
 /* Setting WinDiv Home --------------------------------------------*/
 span.setting-title {
     color: #10A7E8;
-    bottom: 85%;
-    left: 10.5%;
+    top: 7px;
+    left: 85px;
     font-size:32px;
     position:absolute;
 }
 span.setting-2title {
     color: #262D32;
-    bottom:82%;
-    left:10.5%;
+    top:49px;
+    left:85px;
     font-size:16px;
     position:absolute;
 }
@@ -37,7 +37,7 @@ a#close-console {
     /* height:60px;
     width:190px; */
     color:#FFFFFF;
-    background-color:#2F7AA1;
+    background-color:#10A7E8;
     border-radius:10px;
     /* text-align:center; */
     line-height:30px;
@@ -57,13 +57,13 @@ a.top {
 a.exit {
     font-size:25px;
     background-color:#e0e0e0;
-    left: 89.5%;
+    right: 20px;
     top: 5%;
     position:absolute;
 }
 
 
-.sett-dir{
+.sett-dir {
     width: 46%;  /* 设置宽度为46% */
     text-align: left;  /* 左对齐文本 */
     font-size: 28px;  /* 设置字体大小为28px */
@@ -74,16 +74,16 @@ a.exit {
     border-radius: 10px;  /* 设置边界圆角为10px */
 }
 
-.sett-dir:hover{
+.sett-dir:hover {
     background-color: var(--lyx-gray);  /* 鼠标悬浮时改变背景色 */
 }
 
-.sett-dir i{
+.sett-dir i {
     margin: 5px;  /* 设置外边距为5px */
 }
 
-@media screen and (max-width:768px){
-    .sett-dir{
+@media screen and (max-width:768px) {
+    .sett-dir {
         width:100%!important;  /* 在屏幕宽度小于768px时宽度为100% */
     }
 }
@@ -93,17 +93,34 @@ a.setting-bottom {
     text-align: left;
     border-radius: 12px;
     color: #3A3539;
+    width: 120px;
+    height: 40px;
+    background-color: #10A7E8;
+    border-style:solid;
+    border-width:2px;
+    margin-top: 20px;
 }
 
-a#setting-bottom {
-    font-size:18px;
-    text-align: left;
+a.setting-bottom {
+    font-size:22px;
+    text-align:center;
+
     border-radius: 12px;
     color: #3A3539;
     background-color: #10A7E8;
     border-style:solid;
     border-width:2px;
+
+    min-width: 180px;
+    min-height: 60px;
+
+    width: 180px;
+    height: 60px;
+
+    display: inline-block;
 }
+
+
 
 a.setting-font-butt /*om*/{
     font-size:20px;
@@ -141,7 +158,9 @@ a.setting-buttom {
     line-height: 58px;
 }
 
-
+.n.active::after {
+    content: '✓';
+}
 /*Setting WinDiv End --------------------------------------------*/
 
 
@@ -194,24 +213,29 @@ div#rightside-config-show a i {
     position:relative !important;
     top: 9px !important;
     /*
-    这里是原主题的BUG，a标签的i标签的从按钮中心向上偏移了9px，导致按钮的位置不准确，
+    这里是原主题的BUG，a标签的i标签的从按钮中心向上偏移了9px，导致按钮的位置不准确(偏了个十万八千里)，
     所以这里将i标签的top属性设置为9px，让它与按钮的中心对齐。
     */
 }
 
-a[class="extend next"] {/* 主页右翻页按钮 */
+div#toggle-menu a.site-page { /* 移动端菜单按钮 */
     position:relative !important;
-    top: -10px !important;
+    top: 9px !important;
 }
 
-a[class="extend next"] i {
+a[class="extend next"] {/* 主页右翻页按钮 */
+    position:relative !important;
+    top: -11px !important;
+}
+
+a[class="extend next"] i {/* 这里是里面的图标 */
     position:relative !important;
     top: 10px !important;
 }
 
 a[class="extend prev"] {/* 主页左翻页按钮 */
     position:relative !important;
-    top: -10px !important;
+    top: -11px !important;
 }
 
 a[class="extend prev"] i {
@@ -225,3 +249,17 @@ footer img {
 }
 
 /* 原主题BUG修复 End ----------------------------------------------*/
+
+/* 底部时间计算 Home -*/
+
+#footer {
+    color: white; /* 将文字颜色设为白色 */
+    text-align: center; /* 文字居中对齐 */
+    margin-top: 0px; /* 顶部边距设为 0 */
+    font-size: 14px; /* 字体大小设为 14px */
+}
+.workSituationImg {
+    width: 0px;
+    height: 0px;
+}
+/* 底部时间计算 End -*/

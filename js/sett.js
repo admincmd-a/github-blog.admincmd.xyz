@@ -5,21 +5,25 @@ const DEFAULT_THEME = "pink";
 const DEFAULT_BLOG_THEME = "simple";
 const SETTING_MAIN_HTML = `
 <a href="javascript:SettingWin.font()" class="setting-bottom" id="setting-dir">
-    <img src="/img/icon/pc.ico" alt="外观" height="50" width="50" class="setting-icon" />
+    <i class="fa-brands fa-itunes-note"></i>
     <span>字体</span>
 </a>
-<!--<a href="javascript:SettingWin.aplayer()" class="setting-bottom" id="setting-dir-aplayer">
+<span>    </span>
+<a href="javascript:SettingWin.aplayer()" class="setting-bottom" id="setting-dir-aplayer">
     <i class="fa-brands fa-itunes-note"></i>
     <span>APlayer</span>
-</a>-->
+</a>
+<span>    </span>
 <a href="javascript:SettingWin.user()" class="setting-bottom" id="setting-dir-user">
     <i class="fa-solid fa-user"></i>
     <span>自定义</span>
 </a>
+<span>    </span>
 <a href="javascript:SettingWin.about()" class="setting-bottom" id="setting-dir">
     <i class="fa-solid fa-circle-info"></i>
     <span>关于</span>
 </a>
+<span>    </span>
 `;
 const SETTING_FONT_HTML = `
                  <a class="setting-font-butt" href="javascript:setFont(\'DDJB\');"        style="font-family:\'DDJB\';!important;color:#000000"                                                       >  钉钉进步体 </a>
@@ -52,8 +56,18 @@ const SETTING_USER_HTML = `
     <p>按下此按钮将清除您的自定义设置，并标记为新访客，并刷新页面。</p>
 </div>
 `;
+const SETTING_APLAYER_HTML = `
+<label class="checkbox-container">
+        <input type="checkbox" id="customCheckbox">
+        <span class="checkmark" id="checkmark"></span>
+        自定义复选框
+    </label>
+`
 
 let DIV_HTML = ``;
+// 样式常量提取
+const BLUR_STYLE = "filter: blur(100px); pointer-events: none; opacity: 0.7;";
+const RESET_STYLE = "filter: none; pointer-events: auto; opacity: 1;";
 
 
 
@@ -89,19 +103,20 @@ function setFont(font) {
 }
 
 
-// 样式常量提取
-const BLUR_STYLE = "filter: blur(5px); pointer-events: none; opacity: 0.7;";
-const RESET_STYLE = "filter: none; pointer-events: auto; opacity: 1;";
 
 const SettingWin = {
     // 属性定义
     currentDir: "",  // 修复非法 this:dir 语法
+    title: "",
+    subtitle: "",
+
     
     // 主路由方法
     topWin() {  // 更符合驼峰命名规范
         if (this.currentDir === SETTING_MAIN_HTML) {
             this.exit();
         } else {
+            // 若后续有
             switch (this.currentDir) {
                 default:
                     this.main();
@@ -127,6 +142,12 @@ const SettingWin = {
         this.setDiv(SETTING_FONT_HTML);  // 统一使用this调用
         this.setTitle("字体", "该设置即时生效，设置针对所有显示文本(代码块等特殊位置除外)。");
     },
+    // APlayer设置
+    aplayer() {
+        this.setDiv(SETTING_APLAYER_HTML);
+        this.setTitle("APlayer", "");
+
+    },
 
     user() {
         this.setDiv(SETTING_USER_HTML);
@@ -141,13 +162,22 @@ const SettingWin = {
 
     // 动态加载设置内容
     setDiv(divHtml) {
-        const container = document.getElementById("setting-div");
-        container.innerHTML = divHtml;
+        if (isMobile()) {
+            Snackbar.show({
+                text: '移动端暂不支持此功能。',
+                pos: 'top-right',
+                action: 2000,
+            });
+        } else {
+            const container = document.getElementById("setting-div");
+                container.innerHTML = divHtml;
+                
+                document.getElementById("sett").style.display = "block";
+                document.getElementById("web").style = BLUR_STYLE;
+                
+                this.currentDir = divHtml;  // 属性名同步修改
+        }
         
-        document.getElementById("sett").style.display = "block";
-        document.getElementById("web").style = BLUR_STYLE;  // 使用常量
-        
-        this.currentDir = divHtml;  // 属性名同步修改
     },
 
     // 设置标题
@@ -157,12 +187,15 @@ const SettingWin = {
         
         titleEl.textContent = title;        // 修复错误的赋值方式
         subtitleEl.textContent = subtitle;  // 使用textContent代替直接赋值
-    }
+
+        this.title = title;
+        this.subtitle = subtitle;
+    },
 };
 
 function clearCookies() {
-    var r=confirm("确定要清除所有 Cookie 和 localStorage 吗？");
-    if (r==true) {
+    var r = confirm("确定要清除所有 Cookie 和 localStorage 吗？\n\n 确定=清除 取消=取消");
+    if (r == true) {
         localStorage.clear();
         location.reload();
         var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
@@ -178,8 +211,9 @@ function clearCookies() {
             action: 2000,
         });
     }
-    
 }
+
+
 
 //     console.log("WindowsSetting");
 //     document.getElementById("setting").style.display = `

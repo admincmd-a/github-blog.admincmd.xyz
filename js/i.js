@@ -1,23 +1,36 @@
 // 主 JS 文件
 /*
 */
-debugger;
+// debugger;
 
-const now = new Date();// 获取当前日期、时间
-const year = now.getFullYear();
-const month = now.getMonth() + 1; // 月份从0开始，需加1
-const day = now.getDate(); // 使用getDate获取当前日期
-const md = `${month}-${day}`; // 使用模板字符串
+
+// 设置主循环模块
+update();
+
+var now = new Date();// 获取当前日期、时间
+var year = now.getFullYear();
+var month = now.getMonth() + 1; // 月份从0开始，需加1
+var day = now.getDate(); // 使用getDate获取当前日期
+var md = `${month}-${day}`; // 使用模板字符串
 // 检查今日是否已经弹窗
-const todayKey = `${year}-${month}-${day}`;
-const hasShownToday = localStorage.getItem(todayKey);
-const today = now;
+var todayKey = `${year}-${month}-${day}`;
+var hasShownToday = localStorage.getItem(todayKey);
+var today = now;
 // 获取今天的农历日期
-const lunarDate = LunarCalendar.solarToLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
-const nowZhData = `${today.getMonth() + 1}-${today.getDate()}`// 换为农历
+var lunarDate = LunarCalendar.solarToLunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
+var nowZhData = `${today.getMonth() + 1}-${today.getDate()}`// 换为农历
 // 格式化农历日期为中文
-const lunarDateChinese = `${lunarDate.lunarYear}年${lunarDate.lunarMonthName}${lunarDate.lunarDayName}`;
-const lunarDateChineseNY = `${lunarDate.lunarMonthName}${lunarDate.lunarDayName}`;
+var lunarDateChinese = `${lunarDate.lunarYear}年${lunarDate.lunarMonthName}${lunarDate.lunarDayName}`;
+var lunarDateChineseNY = `${lunarDate.lunarMonthName}${lunarDate.lunarDayName}`;
+
+const FOOTER = document.getElementById("footer");
+const WORKBOARD = document.getElementById("workboard")
+
+var PROGRESS_BAR = document.getElementById('year-progress-bar');
+var currentTimeHtml = "";
+var img = "";
+var description = "";
+
 
 // 定义一个文本型数组——用于湖人
 const phrases = [
@@ -25,63 +38,41 @@ const phrases = [
     "最新消息：美国灭国了。",
     "突发新闻：日本岛沉没了！",
     "非常抱歉，因为不可控原因，博客将于明天停止运营，感谢您的陪伴，再见",
-    
+
 ];
 
-let DText = "0";
-let Text = "---";
-let timeChange;// 欢迎语
+var DText = "0";
+var Text = "---";
+var timeChange;// 欢迎语
 
-
+var times = 100;// 主循环间隔时间
+var timer = 0;// 定时器
 
 // 往控制台里写点东西
 console.log('Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,Hello,');
 // 十分的胜景，害的我笑了一下
-console.log(`
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-.....................@@@@..................@@@..........................@@@@..............................@@@@@..................................@@@...............
-.....................@@@@..................@@@..........................@@@@............................@@@@@@@@@................................@@@...............
-.....................@@@@..................@@@..........................@@@@...........................@@@@@@@@@@@...............................@@@...............
-....................@@@@@@.................@@@..........................@@@@...........................@@@@@.@@@@@...............................@@@...............
-....................@@@@@@.................@@@..........................@@@@..........................@@@@.....@@@@..............................@@@...............
-....................@@@@@@.................@@@........................................................@@@@.....@@@@..............................@@@...............
-...................@@@@@@@@................@@@........................................................@@@@.....@@@@..............................@@@...............
-...................@@@@@@@@.........@@@@@@.@@@...@@@@@@@@@.@@@@.........@@@@.........@@@.@@@@@@......@@@@......@@@@..@@@@@@@@@.@@@@.......@@@@@@.@@@...............
-...................@@@@.@@@........@@@@@@@@@@@...@@@@@@@@@@@@@@@........@@@@.........@@@@@@@@@@@.....@@@@......@@@@..@@@@@@@@@@@@@@@.....@@@@@@@@@@@...............
-...................@@@..@@@.......@@@@@@@@@@@@...@@@@@@@@@@@@@@@........@@@@.........@@@@@@@@@@@@....@@@@............@@@@@@@@@@@@@@@....@@@@@@@@@@@@...............
-..................@@@@..@@@@......@@@@...@@@@@...@@@@@.@@@@@.@@@@.......@@@@.........@@@@@...@@@@....@@@@............@@@@@.@@@@@.@@@@...@@@@...@@@@@...............
-..................@@@@..@@@@.....@@@@.....@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@@.....@@@....@@@@............@@@@..@@@@..@@@@..@@@@.....@@@@...............
-..................@@@@@@@@@@.....@@@@.....@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@@.....@@@....@@@@......@@@@..@@@@..@@@@..@@@@..@@@@.....@@@@...............
-.................@@@@@@@@@@@@....@@@@......@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@....@@@@......@@@@..@@@@..@@@@..@@@@..@@@@......@@@...............
-.................@@@@@@@@@@@@....@@@@......@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@....@@@@......@@@@..@@@@..@@@@..@@@@..@@@@......@@@...............
-.................@@@@....@@@@....@@@@.....@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@....@@@@@.....@@@@..@@@@..@@@@..@@@@..@@@@.....@@@@...............
-.................@@@@....@@@@....@@@@.....@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@.....@@@@.....@@@@..@@@@..@@@@..@@@@..@@@@.....@@@@...............
-................@@@@......@@@@....@@@@...@@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@.....@@@@@...@@@@...@@@@..@@@@..@@@@...@@@@...@@@@@...............
-................@@@@......@@@@....@@@@@@@@@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@......@@@@@@@@@@@...@@@@..@@@@..@@@@...@@@@@@@@@@@@...............
-................@@@@......@@@@.....@@@@@@@@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@......@@@@@@@@@@....@@@@..@@@@..@@@@....@@@@@@@@@@@...............
-...............@@@@@.......@@@@.....@@@@@@@@@@...@@@@..@@@@..@@@@.......@@@@.........@@@......@@@........@@@@@@@.....@@@@..@@@@..@@@@.....@@@@@@@@@@...............
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
-...................................................................................................................................................................
+console.log(`                                                                                                                                     
+      @@@@                  @@@                          @@@@                              @@@@@                                  @@@
+      @@@@                  @@@                          @@@@                            @@@@@@@@@                                @@@
+      @@@@                  @@@                          @@@@                           @@@@@@@@@@@                               @@@
+     @@@@@@                 @@@                          @@@@                           @@@@@ @@@@@                               @@@
+     @@@@@@                 @@@                          @@@@                          @@@@     @@@@                              @@@
+     @@@@@@                 @@@                                                        @@@@     @@@@                              @@@
+    @@@@@@@@                @@@                                                        @@@@     @@@@                              @@@
+    @@@@@@@@         @@@@@@ @@@   @@@@@@@@@ @@@@         @@@@         @@@ @@@@@@      @@@@      @@@@  @@@@@@@@@ @@@@       @@@@@@ @@@
+    @@@@ @@@        @@@@@@@@@@@   @@@@@@@@@@@@@@@        @@@@         @@@@@@@@@@@     @@@@      @@@@  @@@@@@@@@@@@@@@     @@@@@@@@@@@
+    @@@  @@@       @@@@@@@@@@@@   @@@@@@@@@@@@@@@        @@@@         @@@@@@@@@@@@    @@@@            @@@@@@@@@@@@@@@    @@@@@@@@@@@@
+   @@@@  @@@@      @@@@   @@@@@   @@@@@ @@@@@ @@@@       @@@@         @@@@@   @@@@    @@@@            @@@@@ @@@@@ @@@@   @@@@   @@@@@
+   @@@@  @@@@     @@@@     @@@@   @@@@  @@@@  @@@@       @@@@         @@@@     @@@    @@@@            @@@@  @@@@  @@@@  @@@@     @@@@
+   @@@@@@@@@@     @@@@     @@@@   @@@@  @@@@  @@@@       @@@@         @@@@     @@@    @@@@      @@@@  @@@@  @@@@  @@@@  @@@@     @@@@
+  @@@@@@@@@@@@    @@@@      @@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@    @@@@      @@@@  @@@@  @@@@  @@@@  @@@@      @@@
+  @@@@@@@@@@@@    @@@@      @@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@    @@@@      @@@@  @@@@  @@@@  @@@@  @@@@      @@@
+  @@@@    @@@@    @@@@     @@@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@    @@@@@     @@@@  @@@@  @@@@  @@@@  @@@@     @@@@
+  @@@@    @@@@    @@@@     @@@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@     @@@@     @@@@  @@@@  @@@@  @@@@  @@@@     @@@@
+ @@@@      @@@@    @@@@   @@@@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@     @@@@@   @@@@   @@@@  @@@@  @@@@   @@@@   @@@@@
+ @@@@      @@@@    @@@@@@@@@@@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@      @@@@@@@@@@@   @@@@  @@@@  @@@@   @@@@@@@@@@@@
+ @@@@      @@@@     @@@@@@@@@@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@      @@@@@@@@@@    @@@@  @@@@  @@@@    @@@@@@@@@@@
+@@@@@       @@@@     @@@@@@@@@@   @@@@  @@@@  @@@@       @@@@         @@@      @@@        @@@@@@@     @@@@  @@@@  @@@@     @@@@@@@@@@
 `)
 // ----------------------
 // HTTP透明端口转发：80 8080 8880 2052 2082 2086 2095
@@ -118,9 +109,54 @@ backgroundColor #323232 通知窗口的背景颜色。
 duration 5000 通知淡出前的显示时间（毫秒）。
 onActionClick function(ele) 默认动作为关闭通知。
 onClose function(ele) 关闭通知时触发。
+
+JSDoc 注释格式
+
+JSDoc 注释以 \/** 开始，以 *\/ 结束，每行以 * 开头。注释中可以包含多个标签，每个标签提供不同类型的信息。以下是一些常用的 JSDoc 标签：
+
+@param：描述函数的参数，包括类型和用途。
+
+@returns 或 @return：描述函数的返回值。
+
+@function 或 @method：指明一个函数或方法。
+
+@type：指定变量的类型。
+
+@example：提供代码示例。
+
+@class：描述一个类。
+
+@todo：列出待办事项或计划中的功能。
+
+值类型(基本类型)：字符串（String）、数字(Number)、布尔(Boolean)、空（Null）、未定义（Undefined）、Symbol。
+
+引用数据类型（对象类型）：对象(Object)、数组(Array)、函数(Function)，还有两个特殊的对象：正则（RegExp）和日期（Date）
 */
 
 // 邢昭博是个大傻逼，他居然把自己的名字写成了邢昭博，这简直就是个笑话。(AI 生成)
+
+// 主循环模块 ----------------------------------------------------
+
+/**
+ * 主循环执行函数
+ */
+function update() {
+    if (PROGRESS_BAR) {// 判断是否存在进度条元素, 防止重复执行，免得tm控制台里全是报错
+        updateProgressBars(); // 每ms更新一次
+    }
+
+
+    /**
+     * 下面是处理流程
+     */
+    {
+        if (timer === 0) {
+            setInterval(update, times)
+        }
+        timer++; // 计时器
+    }
+}
+
 
 // 欢迎语，cookie 提醒 --------------------------------------------
 // 首次访问，弹出Cookie提醒    
@@ -131,7 +167,7 @@ console.log("农历日期:", lunarDateChinese);
 try {
     switch (md) { // 公历判断
         // 纪念日 --------------
-        case "7-7":      
+        case "7-7":
             DText = `今天是 1937 年 7 月 7 日卢沟桥事变 ${year - 1937} 周年纪念日！`
             Text = "勿忘国耻，振兴中华。"
             break;
@@ -140,7 +176,7 @@ try {
             Text = "勿忘国耻，振兴中华。"
             break;
         case "12-13":
-            document.getElementsByTagName("html")[0].setAttribute("style","filter: grayscale(100%);");
+            document.getElementsByTagName("html")[0].setAttribute("style", "filter: grayscale(100%);");
             DText = "请起立默哀 30 秒";
             Text = `勿忘国耻，振兴中华！\n <br /> 今天是南京大屠杀 ${year - 1937} 年纪念日、国家公祭日 \n <br /> 为在南京大屠杀中被杀害的平民默哀，铭记历史，珍视和平，绝不让这样的悲剧再次发生。`;
             break;
@@ -152,9 +188,9 @@ try {
         case "12-31":
             DText = "元旦快乐";
             Text = `新年快乐！\n <br /> ${year + 1} 年的进度条马上就要开始了！<br />
-            <audio controls>
+            <!--<audio controls>
               <source src="file:///H:/%E5%9B%BD%E6%A0%87/img/%E5%9B%BE%E6%81%92%E5%AE%87%E6%95%B0%E5%AD%97%E7%94%9F%E5%91%BD%E5%A4%87%E4%BB%BD.mp3" type="audio/mpeg">
-            </audio>`;
+            </audio>-->`;
             break;
         case "3-8":
             DText = "妇女节";
@@ -186,7 +222,7 @@ try {
             DText = `中国共产党 ${year - 1921} 岁生日快乐`;
             Text = "今天时建党节。"
             break;
-        case ["10-1","10-2","10-3","10-4","10-5","10-6","10-7"]:
+        case ["10-1", "10-2", "10-3", "10-4", "10-5", "10-6", "10-7"]:
             DText = `中华人民共和国 ${year - 1949} 岁生日快乐！`
             Text = ``
             break;
@@ -198,11 +234,11 @@ try {
             break;
     }
     switch (lunarDateChineseNY) { // 农历判断
-        case ["腊月廿九","腊月三十"]:// 偶尔除夕会在腊月廿九，所以也要做判断,反正也隔不了几天
+        case ["腊月廿九", "腊月三十"]:// 偶尔除夕会在腊月廿九，所以也要做判断,反正也隔不了几天
             DText = `${lunarDate.getYear() + 1} 年新年快乐！`
             Text = ``
             break;
-        case ["正月初一","正月初二","正月初三","正月初四","正月初五","正月初六"]:
+        case ["正月初一", "正月初二", "正月初三", "正月初四", "正月初五", "正月初六"]:
             DText = `${lunarDate.getYear()} 新年快乐！`
             Text = ``
             break;
@@ -238,18 +274,7 @@ try {
                 duration: 10000,
             })
         } else {
-            // 模糊其他
-            document.getElementById("web").style = "filter: blur(5px);pointer-events: none;opacity: 0.7;";/* 定义模糊和禁用的类 *//*全局模糊和禁用*/
-            document.getElementById("timeWin").innerHTML = 
-            `
-            <div class="win" id="win">
-                <p style="font-size:30px;color:#2F7AA1;text-align: center;">${DText}</p>
-                <p style="font-size:16px;color:#003152;text-align: center;">${Text}</p>
-                <br />
-                <a class="closeWinbox" href="javascript:closeWindows()" id="closeWin">关闭</a>
-                <br />
-            </div>
-            `;
+            messageWin.show(DText, Text, null, true)
         }
     }
     // 设置今天已显示
@@ -258,19 +283,6 @@ try {
     console.error('创建节日窗口时出错:', error);
 }
 
-function closeWindows() {
-    document.getElementById("win").style.display = "none";
-    document.getElementById("web").style = "";// 取消模糊
-    document.web.classList.remove('blur-and-disable');
-}
-
-function isMobile() {// 判断是否是移动端
-    if (window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
-        return true; // 移动端
-    } else {
-        return false; // PC端
-    }
-}
 
 // 以下是欢迎语
 // -----------------------------------------------------------------------------
@@ -425,7 +437,7 @@ switch (ipLoacation.result.ad_info.nation) {
                 break;
             case "山东省":
                 posdesc = "遥望齐州九点烟，一泓海水杯中泻。";
-            break;
+                break;
             case "湖北省":
                 switch (ipLoacation.result.ad_info.city) {
                     case "武汉市":
@@ -501,8 +513,8 @@ switch (ipLoacation.result.ad_info.nation) {
 }
 //判断时间
 
-if (now.getHours()>= 5 && now.getHours() < 11) timeChange = "<span>上午好</span>，一日之计在于晨";
-else if (now.getHours()>= 1 && now.getHours() < 13) timeChange = "<span>中午好</span>，开——饭——了——";
+if (now.getHours() >= 5 && now.getHours() < 11) timeChange = "<span>上午好</span>，一日之计在于晨";
+else if (now.getHours() >= 1 && now.getHours() < 13) timeChange = "<span>中午好</span>，开——饭——了——";
 else if (now.getHours() >= 13 && now.getHours() < 15) timeChange = "<span>下午好</span>，懒懒地睡个午觉吧！";
 else if (now.getHours() >= 15 && now.getHours() < 16) timeChange = "<span>下午三点了</span>，上课摸鱼 ING...";
 else if (now.getHours() >= 16 && now.getHours() < 19) timeChange = "<span>夕阳无限好！</span>";
@@ -510,7 +522,7 @@ else if (now.getHours() >= 19 && now.getHours() < 24) timeChange = "<span>晚上
 else timeChange = "都几点了，还在熬夜？";
 // 检查 welcome-info 是否存在
 const welcomeInfoElement = document.getElementById("welcome-info");
-if (!welcomeInfoElement) {}
+if (!welcomeInfoElement) { }
 //自定义文本需要放的位置
 welcomeInfoElement.innerHTML = `欢迎来自<span>${pos}</span>的${ass}，${timeChange}<br />你距我约有<span>${dist}</span>公里，${posdesc}，您的 IP 地址是 ${ip}`;
 if (sessionStorage.getItem("popCookieWindow") != "0") {
@@ -519,7 +531,7 @@ if (sessionStorage.getItem("popCookieWindow") != "0") {
             text: '本站使用 Cookie 和 本地会话存储 保证浏览体验和网站统计',
             pos: 'top-right',
             actionText: "查看博客声明",
-            onActionClick: function (element) {
+            onActionClick: function () {
                 window.open("/license")
             },
         })
@@ -550,7 +562,9 @@ setTimeout(function () { // 康康是不是来自其他网站
             console.log('由本站镜像站点访问')
             break;
         case ' ? ? ? ':
+            console.log("无效")
             domain = pos;// 若来源为空，则使用定位信息
+
             // Snackbar.show({
             //     text: `欢迎从来自 ${domain} 的访客访问本站！`,
             //     pos: 'top-center',
@@ -569,64 +583,7 @@ setTimeout(function () { // 康康是不是来自其他网站
             });
             break;
     }
-},2500)
-
-
-
-    // 如没有来源，则修改为？？？
-    // if (document.referrer==undefined||document.referrer.indexOf("www.travellings.cn")!=-1||document.referrer.indexOf("www.travellings.cn")!=-1)
-    //     { 
-            
-            
-    //     } else {
-        //     setTimeout(function () { // 康康是不是来自其他网站
-        //         if(domain=='blog.admincmd.xyz') {
-        //             console.log('由本站主站站点访问')
-        //         } else if(domain=='vercel-blog.admincmd.xyz') {
-        //             console.log('由本站镜像站点访问') // 已弃用此域名
-        //         } else if(domain=='netlify-blog.admincmd.xyz') {
-        //             console.log('由本站镜像站点访问')
-        //         } else if(domain=='cf-blog.admincmd.xyz') {
-        //             console.log('由本站镜像站点访问')
-        //         } else if(domain=='github-blog.admincmd.xyz') {
-        //             console.log('由本站镜像站点访问')
-        //         } else if (domain == 'www.travelling.cn') {
-        //             // 康康是不是来自开往的
-        //             Snackbar.show({
-        //                 text: '欢迎来自开往的穿梭者！',
-        //                 pos: 'top-center',
-        //             })
-                
-        //         } else if (domain == ' ? ? ? ') { 
-        //             console.log('由外部站点访问')
-        //             if(domain==' ? ? ? ') {
-        //                 domain = pos;// 若来源为空，则使用定位信息
-        //                 Snackbar.show({
-        //                     text: `欢迎从来自 ${domain} 的访客访问本站！`,
-        //                     pos: 'top-center',
-        //                     actionText: "",
-        //                     onActionClick: function (element) {
-        //                         window.open("")
-        //                     },
-        //                 });
-        //             } else {
-        //                 console.warn('');
-        //                 Snackbar.show({// 如果有
-        //                     text: `欢迎从来自 ${domain} 的访客访问本站！`,
-        //                     pos: 'top-center',
-        //                     actionText: "",
-        //                     onActionClick: function (element) {
-        //                         window.open("")
-        //                     },
-        //                 });
-        //             }
-    
-        //             }
-                    
-        //     },2500)
-        // }
-    
-// }
+}, 2500)
 
 //自带上文浏览器提示
 
@@ -645,26 +602,26 @@ function browserVersion() {
     var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
     var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //Edge浏览器
     var isFirefox = userAgent.indexOf("Firefox") > -1; //Firefox浏览器
-    var isOpera = userAgent.indexOf("Opera")>-1 || userAgent.indexOf("OPR")>-1 ; //Opera浏览器
-    var isChrome = userAgent.indexOf("Chrome")>-1 && userAgent.indexOf("Safari")>-1 && userAgent.indexOf("Edge")==-1 && userAgent.indexOf("OPR")==-1; //Chrome浏览器
-    var isSafari = userAgent.indexOf("Safari")>-1 && userAgent.indexOf("Chrome")==-1 && userAgent.indexOf("Edge")==-1 && userAgent.indexOf("OPR")==-1; //Safari浏览器
-    if(isEdge) {
-        if(userAgent.split('Edge/')[1].split('.')[0]<90){
+    var isOpera = userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1; //Opera浏览器
+    var isChrome = userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Edge") == -1 && userAgent.indexOf("OPR") == -1; //Chrome浏览器
+    var isSafari = userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") == -1 && userAgent.indexOf("Edge") == -1 && userAgent.indexOf("OPR") == -1; //Safari浏览器
+    if (isEdge) {
+        if (userAgent.split('Edge/')[1].split('.')[0] < 90) {
             browserTC()
         }
-    } else if(isFirefox) {
-        if(userAgent.split('Firefox/')[1].split('.')[0]<90){
+    } else if (isFirefox) {
+        if (userAgent.split('Firefox/')[1].split('.')[0] < 90) {
             browserTC()
         }
-    } else if(isOpera) {
-        if(userAgent.split('OPR/')[1].split('.')[0]<80){
+    } else if (isOpera) {
+        if (userAgent.split('OPR/')[1].split('.')[0] < 80) {
             browserTC()
         }
-    } else if(isChrome) {
-        if(userAgent.split('Chrome/')[1].split('.')[0]<90){
+    } else if (isChrome) {
+        if (userAgent.split('Chrome/')[1].split('.')[0] < 90) {
             browserTC()
         }
-    } else if(isSafari) {
+    } else if (isSafari) {
         //不知道Safari哪个版本是该淘汰的老旧版本
     }
 }
@@ -682,7 +639,7 @@ function getCookie(name) {
     else
         return null;
 }
-if(getCookie('browsertc')!=1){
+if (getCookie('browsertc') != 1) {
     setCookies({
         browsertc: 1,
     }, 1);
@@ -698,8 +655,8 @@ if(getCookie('browsertc')!=1){
 //22.12.9 update: add search in this page
 
 // ------
-function setMask(){//设置遮罩层
-    if(document.getElementsByClassName("rmMask")[0]!=undefined){
+function setMask() {//设置遮罩层
+    if (document.getElementsByClassName("rmMask")[0] != undefined) {
         return document.getElementsByClassName("rmMask")[0];
     }
     mask = document.createElement('div');
@@ -713,7 +670,7 @@ function setMask(){//设置遮罩层
     mask.style.left = '0';
     mask.style.zIndex = 998;
     document.body.appendChild(mask);
-    document.getElementById("rightMenu").style.zIndex=19198;
+    document.getElementById("rightMenu").style.zIndex = 19198;
     return mask;
 }
 
@@ -775,12 +732,12 @@ rmf.switchDarkMode = function () { // 切换暗黑模式，执行位置
     typeof FB === 'object' && window.loadFBComment()
     window.DISQUS && document.getElementById('disqus_thread').children.length && setTimeout(() => window.disqusReset(), 200)
 };
-rmf.yinyong=function(){
+rmf.yinyong = function () {
     var e = document.getElementsByClassName("el-textarea__inner")[0],
         t = document.createEvent("HTMLEvents");
-    t.initEvent("input", !0, !0), e.value = d.value = "> "+getSelection().toString()+"\n\n", e.dispatchEvent(t);
+    t.initEvent("input", !0, !0), e.value = d.value = "> " + getSelection().toString() + "\n\n", e.dispatchEvent(t);
     console.log(getSelection().toString());
-    document.getElementsByClassName("el-textarea__inner")[0].value="> "+getSelection().toString()+"\n\n";
+    document.getElementsByClassName("el-textarea__inner")[0].value = "> " + getSelection().toString() + "\n\n";
     Snackbar.show({
         text: '为保证最佳评论阅读体验，建议不要删除空行',
         pos: 'top-center',
@@ -830,26 +787,26 @@ rmf.copySelect = function () {
 
 //回到顶部
 rmf.scrollToTop = function () {
-    document.getElementsByClassName("menus_items")[1].setAttribute("style","");
-    document.getElementById("name-container").setAttribute("style","display:none");
+    document.getElementsByClassName("menus_items")[1].setAttribute("style", "");
+    document.getElementById("name-container").setAttribute("style", "display:none");
     btf.scrollToDest(0, 500);
 }
 rmf.translate = function () {
     document.getElementById("translateLink").click();
 }
-rmf.searchinThisPage=()=>{
+rmf.searchinThisPage = () => {
     document.body.removeChild(mask);
-    document.getElementsByClassName("local-search-box--input")[0].value=window.getSelection().toString()
+    document.getElementsByClassName("local-search-box--input")[0].value = window.getSelection().toString()
     document.getElementsByClassName("search")[0].click()
-    var evt = document.createEvent("HTMLEvents");evt.initEvent("input", false, false);document.getElementsByClassName("local-search-box--input")[0].dispatchEvent(evt);
+    var evt = document.createEvent("HTMLEvents"); evt.initEvent("input", false, false); document.getElementsByClassName("local-search-box--input")[0].dispatchEvent(evt);
 }
-document.body.addEventListener('touchmove', function(e){
-    
+document.body.addEventListener('touchmove', function (e) {
+
 }, { passive: false });
 function popupMenu() {
     //window.oncontextmenu=function(){return false;}
     window.oncontextmenu = function (event) {
-        if(event.ctrlKey||document.body.clientWidth<900) return true;
+        if (event.ctrlKey || document.body.clientWidth < 900) return true;
         $('.rightMenu-group.hide').hide();
         if (document.getSelection().toString()) {
             $('#menu-text').show();
@@ -863,17 +820,17 @@ function popupMenu() {
         }
         var el = window.document.body;
         el = event.target;
-        var a=/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-        if (a.test(window.getSelection().toString())&&el.tagName!="A"){
+        var a = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
+        if (a.test(window.getSelection().toString()) && el.tagName != "A") {
             $('#menu-too').show()
         }
         if (el.tagName == 'A') {
             $('#menu-to').show()
             rmf.open = function () {
-                if(el.href.indexOf("http://")==-1&&el.href.indexOf("https://")==-1||el.href.indexOf("blog.admincmd.xyz")!=-1){
+                if (el.href.indexOf("http://") == -1 && el.href.indexOf("https://") == -1 || el.href.indexOf("blog.admincmd.xyz") != -1) {
                     pjax.loadUrl(el.href)
                 }
-                else{
+                else {
                     location.href = el.href
                 }
             }
@@ -909,7 +866,7 @@ function popupMenu() {
                 document.execCommand("Copy");
                 document.body.removeChild(txa);
             }
-            rmf.saveAs=function(){
+            rmf.saveAs = function () {
                 var a = document.createElement('a');
                 var url = el.src;
                 var filename = url.split("/")[-1];
@@ -964,20 +921,20 @@ function popupMenu() {
         if (pageY + rmHeight > window.innerHeight) {
             pageY -= pageY + rmHeight - window.innerHeight;
         }
-        mask=setMask();
-        window.onscroll=()=>{
+        mask = setMask();
+        window.onscroll = () => {
             rmf.showRightMenu(false);
-            window.onscroll=()=>{}
+            window.onscroll = () => { }
             document.body.removeChild(mask);
         }
-        $(".rightMenu-item").click(()=>{
+        $(".rightMenu-item").click(() => {
             document.body.removeChild(mask);
         })
-        $(window).resize(()=>{
+        $(window).resize(() => {
             rmf.showRightMenu(false);
             document.body.removeChild(mask);
         })
-        mask.onclick=()=>{
+        mask.onclick = () => {
             document.body.removeChild(mask);
         }
         rmf.showRightMenu(true, pageY, pageX);
@@ -1023,18 +980,14 @@ addLongtabListener(box, popupMenu)
 // -------------------------------------------------------------------------
 // 2024-12-28 解决了首次访问时,没有coockie时导致if执行失败,导致部分图片没有切换.
 // 2025-02-21 现在没有Cookie时，会根据时间自动切换模式。
+// 2025-03-04 修复了会导致一直是白天模式的bug。
 
 if (sessionStorage.getItem("ActivateMode") == "1") { // 向下兼容
     sessionStorage.setItem("ActivateMode", "dark");
 } else if (sessionStorage.getItem("ActivateMode") == "0") {
     sessionStorage.setItem("ActivateMode", "light");
-} else {
+} else if (sessionStorage.getItem("ActivateMode" == null) || sessionStorage.getItem("ActivateMode") == "auto") {
     sessionStorage.setItem("ActivateMode", "auto");
-}
-
-//页面加载后调用
-//检查cook，并判断是否为暗黑模式
-if (sessionStorage.getItem("ActivateMode" == null) || sessionStorage.getItem("ActivateMode") == "auto") {
     if (now.getHours() < 6) {
         // 白天
         sessionStorage.setItem("ActivateMode", "dark");
@@ -1043,7 +996,9 @@ if (sessionStorage.getItem("ActivateMode" == null) || sessionStorage.getItem("Ac
         sessionStorage.setItem("ActivateMode", "light");
         DarkMode();
     }
-}
+} else { }
+//页面加载后调用
+//检查cook，并判断是否为暗黑模式
 
 if (sessionStorage.getItem("ActivateMode") == "dark") DarkMode(); else LigheMode();// 取coockie,判断明亮/暗黑模式
 
@@ -1079,14 +1034,14 @@ function DarkMode() {
 function justLookAround() { // 读取 sitemap.txt 并随机跳转到其中一个链接,用于随便转转模块
     // 解决了原有 HTML 无法后退的问题
     fetch('/sitemap.txt')
-    /*
-    格式：
-    单行一个URL，一行一个，不允许有空行
-    如：
-    https://example.com/page1
-    https://example.com/page2
-    https://example.com/page3
-    */
+        /*
+        格式：
+        单行一个URL，一行一个，不允许有空行
+        如：
+        https://example.com/page1
+        https://example.com/page2
+        https://example.com/page3
+        */
         .then(response => {
             if (!response.ok) {
                 Snackbar.show({
@@ -1121,11 +1076,11 @@ function justLookAround() { // 读取 sitemap.txt 并随机跳转到其中一个
                 showAction: false
             });
         });
-    
+
 }
 
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     console.log("页面及所有资源加载完毕");
 
     // 这里可以执行相关的代码
@@ -1175,14 +1130,14 @@ const DFHyd = [
 ];
 
 const DFH = [ // 歌曲谱
-    5, 6, 2, 1, 6000, 2   ,5 , 6, 1000 ,6 ,5,
-//  东 方 红，太 阳    升，中国  出      了 个
-//  毛 主 席，爱 人    民，他是  我      们 的
-// 
-    1, 6000,2, 5,2,1,7,6000,//5000,5,2,3,2,
-//  毛 泽   东，他为人民谋幸福，
-//  带 路   人，
-//    1,6000,2,3,2,1,2,1,7000,6000,5000,
+    5, 6, 2, 1, 6000, 2, 5, 6, 1000, 6, 5,
+    //  东 方 红，太 阳    升，中国  出      了 个
+    //  毛 主 席，爱 人    民，他是  我      们 的
+    // 
+    1, 6000, 2, 5, 2, 1, 7, 6000,//5000,5,2,3,2,
+    //  毛 泽   东，他为人民谋幸福，
+    //  带 路   人，
+    //    1,6000,2,3,2,1,2,1,7000,6000,5000,
 
 ];
 
@@ -1302,7 +1257,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.addEventListener('visibilitychange', () => {
         try {
             //if (shouldExclude) return; // 如果 URL 在排除列表中，则直接返回
-            
+
             if (document.hidden) {
                 // 页面失去焦点
                 if (document.title !== '页面没有找到 | 管理员 - 命令提示符') {
@@ -1323,3 +1278,155 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+
+// APlayer 播放器 --------------------------------------------
+
+// function dp() { return null; }
+// window.ap1 = new APlayer({
+//     container: document.getElementById('aplayer'),
+//     theme: '#F57F17',
+//     fixed: true,
+//     lrcType: 3,
+//     audio: [],
+// });
+
+
+// 进度条模块 ------------------------------
+
+document.getElementsByClassName(`time-progress`).innerHTML = `
+<!DOCTYPE html><html>\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<link rel="stylesheet" href="\favi\qq.css">\n</head>\n<body>\n<div class="progress-container">\n  <div class="progress-label" id="time-flies">\n本年过了 <span id="year-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="year-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本月过了 <span id="month-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="month-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本天过了 <span id="day-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="day-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本小时过了 <span id="hour-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="hour-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本分钟过了 <span id="minute-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="minute-progress-bar">\n</div>\n  </div>\n</div>\n<script src="\favi\qq.js">\n</script>\n<p>\n珍惜时间，时光飞逝。</p>\n</body>\n</html>\n
+`
+
+function updateProgressBars() {
+    try {
+        const yearStart = new Date(now.getFullYear(), 0, 1).getTime();
+        const yearEnd = new Date(now.getFullYear() + 1, 0, 1).getTime();
+        const yearProgress = ((now.getTime() - yearStart) / (yearEnd - yearStart)) * 100;
+
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime();
+        const monthProgress = ((now.getTime() - monthStart) / (monthEnd - monthStart)) * 100;
+
+        const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const dayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
+        const dayProgress = ((now.getTime() - dayStart) / (dayEnd - dayStart)) * 100;
+
+        const hourStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()).getTime();
+        const hourEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1).getTime();
+        const hourProgress = ((now.getTime() - hourStart) / (hourEnd - hourStart)) * 100;
+
+        const minuteProgress = ((now.getSeconds() / 60)) * 100; // 计算已过分钟百分比
+
+        // 更新进度条和文本显示
+        updateDisplay('year', yearProgress, 7);
+        updateDisplay('month', monthProgress, 6);
+        updateDisplay('day', dayProgress, 5);
+        updateDisplay('hour', hourProgress, 3);
+        updateDisplay('minute', minuteProgress, 2);
+
+    } catch (error) {
+        console.error('更新模块：时光飞逝 时发生错误:', error);
+    }
+}
+
+// 更新显示函数
+function updateDisplay(period, progress, decimalPlaces) {
+    // 进度条文本，值，精度
+    document.getElementsByClassName(`${period}-progress`).textContent = progress.toFixed(decimalPlaces) + '%';
+    document.getElementsByClassName(`${period}-progress-bar`).style.width = progress.toFixed(decimalPlaces) + '%';
+}
+
+// API ----------------------------------------------------------
+
+/**
+* 判断是否是移动端
+* @return {boolean} true: 移动端 false: PC端
+*/
+function isMobile() {
+    if (window.navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+        return true; // 移动端
+    } else {
+        return false; // PC端
+    }
+}
+
+/**
+ * 更改主循环的间隔时间
+ * @param {number} ontimes 控制主循环的间隔时间，单位ms
+ */
+function setBarsTime(ontimes) { times = ontimes; }
+
+/**
+ * 检查是否是url
+ * @param {String} url 要判断的url
+ * @returns {boolean} true: 是url false: 不是url
+ */
+function isUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+// 消息窗口 ----------------------------------------------------
+
+/**
+ * 消息窗口对象
+ */
+let messageWin = {
+    /** 定时器标识 */
+    DKtime: null,
+};
+
+/**
+ * 打开消息窗口
+ * @param {string} title 主标题
+ * @param {string} content 下附文本
+ * @param {boolean} xh 是否将背景高斯模糊
+ * @param {number} DKtime 显示超时时间，单位ms
+ * @return {boolean} true -- 已成功打开 false -- 移动端，将打开Snackbar提示
+ */
+messageWin.show = function (title, content, DKtime, xh) {
+    if (isMobile()) {
+        Snackbar.show({
+            text: content,
+            actionText: '知道了',
+            duration: 4000,
+            actionTextColor: '#fff',
+        });
+    } else {
+        if (DKtime = 0 || DKtime == undefined || DKtime == null) {
+            DKtime = setTimeout(messageWin.close(), DKtime);
+        }
+        try {
+            if (xh) {
+                // 模糊其他
+                document.getElementById("web").style = "filter: blur(100px);pointer-events: none;opacity: 0.7;";
+                // 定义模糊和禁用的类 全局模糊和禁用
+            }
+            document.getElementById("timeWin").innerHTML =
+                `
+            <div class="win" id="win">
+                <p style="font-size:30px;color:#2F7AA1;text-align: center;">${title}</p>
+                <p style="font-size:16px;color:#003152;text-align: center;">${content}</p>
+                <br />
+                <a class="closeWinbox" href="javascript:messageWin.close()" id="closeWin">关闭</a>
+                <br />
+            </div>
+            `;
+        } catch (error) {
+            console.error('打开消息窗口时发生错误:', error);
+        }
+    }
+}
+
+/**
+ * 关闭消息窗口
+ */
+messageWin.close = function () {
+    document.getElementById("win").style.display = "none";
+    document.getElementById("web").style = "";// 取消模糊
+    clearTimeout(messageWin.DKtime);
+}
