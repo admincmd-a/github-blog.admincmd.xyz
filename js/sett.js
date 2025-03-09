@@ -3,38 +3,38 @@
 const DEFAULT_FONT = "HYTMR";
 const DEFAULT_THEME = "pink";
 const DEFAULT_BLOG_THEME = "simple";
-const SETTING_MAIN_HTML = `
-<a href="javascript:SettingWin.font()" class="setting-bottom" id="setting-dir">
+const config_MAIN_HTML = `
+<a href="javascript:configWin.font()" class="config-bottom" id="config-dir">
     <i class="fa-brands fa-itunes-note"></i>
     <span>字体</span>
 </a>
 <span>    </span>
-<a href="javascript:SettingWin.aplayer()" class="setting-bottom" id="setting-dir-aplayer">
+<!--<a href="javascript:configWin.aplayer()" class="config-bottom" id="config-dir-aplayer">
     <i class="fa-brands fa-itunes-note"></i>
     <span>APlayer</span>
-</a>
+</a>-->
 <span>    </span>
-<a href="javascript:SettingWin.user()" class="setting-bottom" id="setting-dir-user">
+<a href="javascript:configWin.user()" class="config-bottom" id="config-dir-user">
     <i class="fa-solid fa-user"></i>
     <span>自定义</span>
 </a>
 <span>    </span>
-<a href="javascript:SettingWin.about()" class="setting-bottom" id="setting-dir">
+<a href="javascript:configWin.about()" class="config-bottom" id="config-dir">
     <i class="fa-solid fa-circle-info"></i>
     <span>关于</span>
 </a>
 <span>    </span>
 `;
-const SETTING_FONT_HTML = `
-                 <a class="setting-font-butt" href="javascript:setFont(\'DDJB\');"        style="font-family:\'DDJB\';!important;color:#000000"                                                       >  钉钉进步体 </a>
-<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'BWKS\');"        style="font-family:\'BWKS\';!important;color:#000000"                                                       > 方正北魏楷书_GBK </a>
-<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'HMBO\');"        style="font-family:\'HMBO\';!important;color:#000000"                                                       > 鸿蒙黑体 </a>
-<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'SHBO\');"        style="font-family:\'SHBO\';!important;color:#000000"                                                       > 思源黑体 </a>
-<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'FZXS\');"        style="font-family:\'FZXS\';!important;color:#000000"                                                       > 方正像素体 </a>
-<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'HMLI\');"        style="font-family:\'HMLI\';!important;color:#000000"                                                       > HarmonyOS Sans SC Light </a>
-<span>    </span><a class="setting-font-butt" href="javascript:setFont(\'HMME\');"        style="font-family:\'HMME\';!important;color:#000000"                                                       > HarmonyOS Sans SC Medium </a>
-<span>    </span><a class="setting-font-butt" href='javascript:setFont(\'Source Sans\');' style="font-family:\'Source Sans\';!important;color:#000000"                                                > 网站默认 </a>
-<span>    </span><a class="setting-font-butt" href='javascript:setFont(\'main\');'        style='font-family:-apple-system, IBM Plex Mono ,monosapce,\'微软雅黑\';!important;color:#000000'>系统默认 </a>
+const config_FONT_HTML = `
+                 <a class="config-font-butt" href="javascript:setFont(\'DDJB\');"        style="font-family:\'DDJB\';!important;color:#000000"                                                       >  钉钉进步体 </a>
+<span>    </span><a class="config-font-butt" href="javascript:setFont(\'BWKS\');"        style="font-family:\'BWKS\';!important;color:#000000"                                                       > 方正北魏楷书_GBK </a>
+<span>    </span><a class="config-font-butt" href="javascript:setFont(\'HMBO\');"        style="font-family:\'HMBO\';!important;color:#000000"                                                       > 鸿蒙黑体 </a>
+<span>    </span><a class="config-font-butt" href="javascript:setFont(\'SHBO\');"        style="font-family:\'SHBO\';!important;color:#000000"                                                       > 思源黑体 </a>
+<span>    </span><a class="config-font-butt" href="javascript:setFont(\'FZXS\');"        style="font-family:\'FZXS\';!important;color:#000000"                                                       > 方正像素体 </a>
+<span>    </span><a class="config-font-butt" href="javascript:setFont(\'HMLI\');"        style="font-family:\'HMLI\';!important;color:#000000"                                                       > HarmonyOS Sans SC Light </a>
+<span>    </span><a class="config-font-butt" href="javascript:setFont(\'HMME\');"        style="font-family:\'HMME\';!important;color:#000000"                                                       > HarmonyOS Sans SC Medium </a>
+<span>    </span><a class="config-font-butt" href='javascript:setFont(\'Source Sans\');' style="font-family:\'Source Sans\';!important;color:#000000"                                                > 网站默认 </a>
+<span>    </span><a class="config-font-butt" href='javascript:setFont(\'main\');'        style='font-family:-apple-system, IBM Plex Mono ,monosapce,\'微软雅黑\';!important;color:#000000'>系统默认 </a>
 
 <div>
     <p>
@@ -42,21 +42,21 @@ const SETTING_FONT_HTML = `
     </p>
 </div>
 `;
-const SETTING_ABOUT_HTML = `
+const config_ABOUT_HTML = `
 Hexo - Butterfly
 
 网页控制面板
 <a href="/about/">关于</a>
 `;
-const SETTING_USER_HTML = `
+const config_USER_HTML = `
 <span class="h2">Cookis 与 localStorage</span>
 <br />
-<a id="setting-bottom" href="javascript:clearCookies();">清除所有 Cookie 和 localStorage</a>
+<a id="config-bottom" href="javascript:clearCookies();">清除所有 Cookie 和 localStorage</a>
 <div class="note warning modern">
     <p>按下此按钮将清除您的自定义设置，并标记为新访客，并刷新页面。</p>
 </div>
 `;
-const SETTING_APLAYER_HTML = `
+const config_APLAYER_HTML = `
 <label class="checkbox-container">
         <input type="checkbox" id="customCheckbox">
         <span class="checkmark" id="checkmark"></span>
@@ -74,13 +74,13 @@ const RESET_STYLE = "filter: none; pointer-events: auto; opacity: 1;";
 // 从localStorage中获取字体参数，若无则使用默认字体
 document.getElementById("sett").style.display = "none";
 document.getElementById("sett").innerHTML = `
-                <div class="settingtitle" id="settingtitle">
-                    <span id="setting-title" class="setting-title">控制面板</span>
-                    <span id="setting-2title" class="setting-2title">调整网页的设置</span>
-                    <a class="exit" href="javascript:SettingWin.exit();">   X   </a>
-                    <a class="top" href="javascript:SettingWin.topWin();">  ←  <!--🔙--></a>
+                <div class="configtitle" id="configtitle">
+                    <span id="config-title" class="config-title">控制面板</span>
+                    <span id="config-2title" class="config-2title">调整网页的设置</span>
+                    <a class="exit" href="javascript:configWin.exit();">   X   </a>
+                    <a class="top" href="javascript:configWin.topWin();">  ←  <!--🔙--></a>
                 </div>
-                <div class="setting-div" id="setting-div">
+                <div class="config-div" id="config-div">
 
                 </div>
                 `;
@@ -104,7 +104,7 @@ function setFont(font) {
 
 
 
-const SettingWin = {
+var configWin = {
     // 属性定义
     currentDir: "",  // 修复非法 this:dir 语法
     title: "",
@@ -113,7 +113,7 @@ const SettingWin = {
     
     // 主路由方法
     topWin() {  // 更符合驼峰命名规范
-        if (this.currentDir === SETTING_MAIN_HTML) {
+        if (this.currentDir === config_MAIN_HTML) {
             this.exit();
         } else {
             // 若后续有
@@ -133,30 +133,30 @@ const SettingWin = {
 
     // 主面板
     main() {
-        this.setDiv(SETTING_MAIN_HTML);
+        this.setDiv(config_MAIN_HTML);
         this.setTitle("控制面板", "调整网页的设置");
     },
 
     // 字体设置
     font() {
-        this.setDiv(SETTING_FONT_HTML);  // 统一使用this调用
+        this.setDiv(config_FONT_HTML);  // 统一使用this调用
         this.setTitle("字体", "该设置即时生效，设置针对所有显示文本(代码块等特殊位置除外)。");
     },
     // APlayer设置
     aplayer() {
-        this.setDiv(SETTING_APLAYER_HTML);
+        this.setDiv(config_APLAYER_HTML);
         this.setTitle("APlayer", "");
 
     },
 
     user() {
-        this.setDiv(SETTING_USER_HTML);
+        this.setDiv(config_USER_HTML);
         this.setTitle("隐私设置管理", "管理您的 Cookie 和 localStorage。")
     },
 
     // 关于页面
     about() {
-        this.setDiv(SETTING_ABOUT_HTML);  // 修复 this.this 错误
+        this.setDiv(config_ABOUT_HTML);  // 修复 this.this 错误
         this.setTitle("关于", "");
     },
 
@@ -169,7 +169,7 @@ const SettingWin = {
                 action: 2000,
             });
         } else {
-            const container = document.getElementById("setting-div");
+            const container = document.getElementById("config-div");
                 container.innerHTML = divHtml;
                 
                 document.getElementById("sett").style.display = "block";
@@ -182,8 +182,8 @@ const SettingWin = {
 
     // 设置标题
     setTitle(title, subtitle) {
-        const titleEl = document.getElementById("setting-title");
-        const subtitleEl = document.getElementById("setting-2title");
+        const titleEl = document.getElementById("config-title");
+        const subtitleEl = document.getElementById("config-2title");
         
         titleEl.textContent = title;        // 修复错误的赋值方式
         subtitleEl.textContent = subtitle;  // 使用textContent代替直接赋值
@@ -215,66 +215,66 @@ function clearCookies() {
 
 
 
-//     console.log("WindowsSetting");
-//     document.getElementById("setting").style.display = `
+//     console.log("Windowsconfig");
+//     document.getElementById("config").style.display = `
 //     <html>
 //     <body>
-//         <div id="settingWindow" class="js-pjax">
-//             <span class="setting-title">
+//         <div id="configWindow" class="js-pjax">
+//             <span class="config-title">
 //                 <span id="stt">控制面板</span>
 //                 <a id="close-console" onclick="toggleWinbox();">×</a>
 //             </span>
 //             调整网页的设置
-//             <button id="backer" onclick="$('.asetting').hide();$('.settingx').show();$('#backer').hide()">
+//             <button id="backer" onclick="$('.aconfig').hide();$('.configx').show();$('#backer').hide()">
 //                 <i class="fa fa-chevron-left"></i>
 //                 <span>返回</span>
 //             </button>
-//             <div class="settings">
-//                 <div id="setting-buttons">
-//                     <button class="settingx" onclick="$('#theme-settings').show(); $('.settingx').hide(); $('#backer').show();">
+//             <div class="configs">
+//                 <div id="config-buttons">
+//                     <button class="configx" onclick="$('#theme-configs').show(); $('.configx').hide(); $('#backer').show();">
 //                         <i>
 //                             <img src="/img/icon/pc.ico" alt="外观" height="50" width="50">
 //                         </i>
 //                         <span>外观</span>
 //                     </button>
-//                     <button class="settingx" onclick="">
+//                     <button class="configx" onclick="">
 //                         <i>
 //                             <img src="/img/icon/font.ico" alt="外观" height="50" width="50">
 //                         </i>
 //                         <span>字体</span>
 //                     </button>
-//                     <!-- <button class="settingx" onclick="$('#background-settings').show();$('.settingx').hide();$('#backer').show();">
+//                     <!-- <button class="configx" onclick="$('#background-configs').show();$('.configx').hide();$('#backer').show();">
 //                         <i class="far fa-image"></i>
 //                         <span>背景</span>
 //                     </button>
-//                     <button class="settingx" onclick="$('#con-echarts').show();$('.settingx').hide();$('#backer').show();var evt = document.createEvent('HTMLEvents');evt.initEvent('resize', false, false);window.dispatchEvent(evt);">
+//                     <button class="configx" onclick="$('#con-echarts').show();$('.configx').hide();$('#backer').show();var evt = document.createEvent('HTMLEvents');evt.initEvent('resize', false, false);window.dispatchEvent(evt);">
 //                         <i>
 //                             <img src="/img/icon/g.ico" alt="外观" height="50" width="50">
 //                         </i>
 //                         <span>统计</span>
 //                     </button> -->
-//                     <button class="settingx" onclick="$('#con-abouts').show();$('.settingx').hide();$('#backer').show();">
+//                     <button class="configx" onclick="$('#con-abouts').show();$('.configx').hide();$('#backer').show();">
 //                         <i>
 //                             <img src="/img/icon/about.ico" alt="外观" height="50" width="50">
 //                         </i>
 //                         <span>关于</span>
 //                     </button>
-//                     <button class="settingx" onclick="$('#xl-settings').show();$('.settingx').hide();$('#backer').show();">
+//                     <button class="configx" onclick="$('#xl-configs').show();$('.configx').hide();$('#backer').show();">
 //                         <i>
 //                             <img src="/img/icon/net.ico" alt="外观" height="50" width="50">
 //                         </i>
 //                         <span>线路</span>
 //                     </button>
 //                 </div>
-//                 <div id="xl-settings" class="asetting">
-//                     <div id="xl-settings">
+//                 <div id="xl-configs" class="aconfig">
+//                     <div id="xl-configs">
 //                         <h2 class="content-head">线路设置</h2>
 //                         <p></p>
 //                         <a href="blog.admincmd.xyz">默认线路</a>
 //                     </div>
 //                 </div>
-//                 <div id="setting-hides">
-//                     <div id="theme-settings" class="asetting">
+//                 <div id="config-hides">
+//                     <div id="theme-configs" class="aconfig">
 //                         <h2 class="content-head">性能设置</h2>
 //                         <p>
 //                             <div class="content" style="display:flex">
@@ -317,9 +317,9 @@ function clearCookies() {
 
 /*
 
-function WindowsSettingFont() {
-     document.getElementById("setting").style.display = `<div id="setting-hides">
-                    <div id="theme-settings" class="asetting">
+function WindowsconfigFont() {
+     document.getElementById("config").style.display = `<div id="config-hides">
+                    <div id="theme-configs" class="aconfig">
                         <h2 class="content-head">性能设置</h2>
                         <p>
                             <div class="content" style="display:flex">
@@ -358,11 +358,11 @@ function WindowsSettingFont() {
     
 }
 
-document.addEventListener('pjax:complete', tosetting);
-document.addEventListener('DOMContentLoaded', tosetting);
+document.addEventListener('pjax:complete', toconfig);
+document.addEventListener('DOMContentLoaded', toconfig);
 
-function tosetting() {
-    $("#settingWindow").hide();
+function toconfig() {
+    $("#configWindow").hide();
     const blur = localStorage.getItem("blur") !== "false";
     const yjjs = localStorage.getItem("yjjs") === "true";
 
@@ -370,7 +370,7 @@ function tosetting() {
         localStorage.setItem("fpson", "1");
     }
 
-    document.getElementById("settingStyle").innerText = blur ? '' : `
+    document.getElementById("configStyle").innerText = blur ? '' : `
         *,*:not(.card-info)::before,*::after {
             -webkit-backdrop-filter: none!important;
             backdrop-filter: none!important;
@@ -378,7 +378,7 @@ function tosetting() {
             filter: none!important;
         }`;
 
-    // Font setting related
+    // Font config related
     const setFontStyle = (font) => {
         document.querySelectorAll("body,.aplayer").forEach(el => {
             el.style.fontFamily = font;
@@ -431,7 +431,7 @@ function tosetting() {
     }
 
     // UI设置
-    $(".asetting").hide();
+    $(".aconfig").hide();
     $('#backer').hide();
 }
 

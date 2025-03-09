@@ -348,6 +348,37 @@
       </tags>
   </entry>
   <entry>
+    <title>瞎搞向 - 让一个文件夹里有多个“同名”文件（水）</title>
+    <url>/post/1b5d7e144ce7/index.html</url>
+    <content><![CDATA[<meta name='description' content='（水）本文介绍了如何让一个文件夹里有多个“同名”文件。（欢迎进站访问|´・ω・) ノ）'>
+（水）
+
+<h2 id="预览图"><a href="#预览图" class="headerlink" title="预览图"></a>预览图</h2><p><img src="https://s2.loli.net/2024/09/20/yho8A4PB6pSDFMW.png" alt="1.png"></p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="创建文件"><a href="#创建文件" class="headerlink" title="创建文件"></a>创建文件</h3><p>首先，我们往一个文件夹丢几个文件<br>，这里以a.ini 、b.ini、c.ini替代</p>
+<p>然后，新建一个文本文件，名叫 desktop.ini</p>
+<h3 id="修改文件"><a href="#修改文件" class="headerlink" title="修改文件"></a>修改文件</h3><p>写入以下内容</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[LocalizedFileNames]</span></span><br><span class="line"><span class="attr">a.ini</span>=d</span><br><span class="line"><span class="attr">b.ini</span>=d</span><br><span class="line"><span class="attr">c.ini</span>=d </span><br></pre></td></tr></table></figure>
+<p>语法</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[LocalizedFileNames]</span></span><br><span class="line"><span class="section">[原始文件名]</span>=<span class="section">[显示文件名]</span></span><br><span class="line"><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>注：原始文件名需包括扩展名，显示文件名不需<br>且无法修改显示文件名扩展名</p>
+<p>搞完后保存退出</p>
+<p>重启下资源管理器，或者电脑重启下，或者注销都行</p>
+<p>就可以看到效果了</p>
+<h2 id="附注"><a href="#附注" class="headerlink" title="附注"></a>附注</h2><p>这个只是更改你看到的，原始文件名不变</p>
+<p>例如：使用命令提示符执行<code>dir</code>可以看到</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"> E:\一个有几个相同文件名的文件的文件夹 的目录</span><br><span class="line"></span><br><span class="line">2024/08/21  09:24    &lt;DIR&gt;          .</span><br><span class="line">2024/08/21  09:24    &lt;DIR&gt;          ..</span><br><span class="line">2024/08/21  09:20                 7 a.ini</span><br><span class="line">2024/08/21  09:21                 7 b.ini</span><br><span class="line">2024/08/21  09:21                 7 c.ini</span><br><span class="line">               3 个文件             21 字节</span><br><span class="line">               2 个目录 1,661,417,754,624 可用字节</span><br><span class="line"></span><br><span class="line">E:\一个有几个相同文件名的文件的文件夹&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>玩转系统</category>
+        <category>文件</category>
+      </categories>
+      <tags>
+        <tag>Windows</tag>
+        <tag>文件</tag>
+        <tag>DESKTOP.INI</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>解除 锐捷云课堂 学生端 的远控和 USB 禁用</title>
     <url>/post/f483a3a94892/index.html</url>
     <content><![CDATA[<meta name='description' content='本文讲如何在使用锐捷云课堂中解除USB禁用'>
@@ -786,6 +817,56 @@ VolumeName  指定装入点的目标的卷名称。
       </tags>
   </entry>
   <entry>
+    <title>计算机名：你是来找茬的吧</title>
+    <url>/post/7e327e06498d/index.html</url>
+    <content><![CDATA[<meta name='description' content='该文章讲述了有关计算机名的基本概念，以及如何强制性修改计算机名的方法。（欢迎进站访问|´・ω・) ノ）'>
+
+<p><em>X:\Users\Admin-cmd\Hexo-Files\003&gt;copy con title.md</em></p>
+<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><p><a href="https://www.bilibili.com/video/BV1q7421K7zC/" title="https://www.bilibili.com/video/BV1q7421K7zC/">BiliBili</a></p>
+<h2 id="关于计算机名"><a href="#关于计算机名" class="headerlink" title="关于计算机名"></a>关于计算机名</h2><p>计算机名用于在网络中标识计算机的一种方式</p>
+<p>计算机名一般与 hostname (主机名)相同</p>
+<p>由于NETBIOS协议的限制，一般电脑的hostname不能超过15字符(十六字节的缓冲区里，第16个字符必须为NULL)。</p>
+<p>同时，计算机名仍有特殊字符限制，例如：~!@#$%^&amp;*()&lt;&gt;?:”{}[];’|&#x2F;., 等</p>
+<p>计算机名位于注册表以下的几个位置: (经过筛选)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HKLM\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName[ComputerName]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName[ComputerName]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Services\Eventlog[ComputerName]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters[NV Hostname]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters[Hostname]</span><br></pre></td></tr></table></figure>
+
+<p>更改这些注册表，可以强制修改计算机名。</p>
+<hr>
+<h2 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h2><p>为此，我特意写了一个程序</p>
+<p> <a href="https://admincmd.lanzout.com/iCiEf1muu1lg" title="Title">蓝奏云</a> </p>
+<p>使用此程序可以强制性修改计算机名</p>
+<p><img src="/IMG/3_0.PNG" alt=" File : /IMG/3_0.PNG"></p>
+<p>!!! warning 警告<br>    一定要用管理员启动！<br>    请在打开前关闭杀毒软件。<br>    在实体机上运行导致系统损坏，自行负责。</p>
+<h3 id="1-有特殊字符，不超过-15-字符限制"><a href="#1-有特殊字符，不超过-15-字符限制" class="headerlink" title="1 有特殊字符，不超过 15 字符限制"></a>1 有特殊字符，不超过 15 字符限制</h3><p>在修改后，计算机没有任何异常。</p>
+<p>重启试逝</p>
+<p>在 Windows 登录界面，出现’密码不正确’的提示。<br>但是这个用户没有设置密码</p>
+<pre><code>推测原因: 计算机管理读取配置时读取到反斜杠导致用户校验失败，从而出现&#39;密码不正确&#39;
+</code></pre>
+<h3 id="2-有特殊字符，超过-15-字符限制"><a href="#2-有特殊字符，超过-15-字符限制" class="headerlink" title="2 有特殊字符，超过 15 字符限制"></a>2 有特殊字符，超过 15 字符限制</h3><p>在修改后，控制面板已经无法打开</p>
+<p>应用程序因’无足够内存’而无法打开</p>
+<p>电源选项失效</p>
+<p>命令提示符正常，但 shutdown 无法重启、关机</p>
+<pre><code>推测: shutdown 识别到错误的计算机名，导致无法对目标计算机 (本机) 进行电源操作
+</code></pre>
+<p>重启后蓝屏</p>
+<pre><code>推测: 因为 NETBIOS 协议的 15 字符限制，导致 Windows 读取计算机名时被截断，从而引发蓝屏
+</code></pre>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li>CSDN - haiross - windows 通过修改注册表来修改主机名</li>
+</ol>
+<p><em>已复制</em>     <em>1 个文件。</em></p>
+<p><em>X:\Users\Admin-cmd\Hexo-Files\003&gt;_</em></p>
+]]></content>
+      <categories>
+        <category>玩转系统</category>
+      </categories>
+      <tags>
+        <tag>tags</tag>
+        <tag>windows</tag>
+        <tag>胡改</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>文体样式表</title>
     <url>/post/203b0283261c/index.html</url>
     <content><![CDATA[<meta name='description' content='该页面是测试markdown语法格式的页面，主要测试各种样式效果。'>
@@ -831,7 +912,7 @@ VolumeName  指定装入点的目标的卷名称。
 <p>分割线</p>
 <hr>
 <p>链接<br>这是一个链接 <a href="https://markdown.com.cn/">Markdown语法</a>。<br><a href="https://admincmd.xyz/" id="post">1</a><br><a href="https://admincmd.xyz/" id="post">2</a><br><a href="https://admincmd.xyz/" id="post">3</a></p>
-<p>网址及邮箱地址<br><a href="https://markdown.com.cn/">https://markdown.com.cn</a><br><a href="mailto:&#102;&#x61;&#x6b;&#101;&#x40;&#101;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#x6d;">&#102;&#x61;&#x6b;&#101;&#x40;&#101;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#46;&#x63;&#111;&#x6d;</a></p>
+<p>网址及邮箱地址<br><a href="https://markdown.com.cn/">https://markdown.com.cn</a><br><a href="mailto:&#x66;&#97;&#x6b;&#101;&#x40;&#101;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#x66;&#97;&#x6b;&#101;&#x40;&#101;&#x78;&#97;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#111;&#x6d;</a></p>
 <p>不使用效果 *测试 ABCDEFG abcdefg 0123456789 ~_+{}:”&lt;&gt;?| &#96;-&#x3D;[];’,.&#x2F;!@#$%^&amp;*()</p>
 <p>(字符前插入反斜杠 \ )</p>
 <p>!!! note “这个个个个叫标题”<br>    这是一段提示</p>
@@ -1244,87 +1325,6 @@ VolumeName  指定装入点的目标的卷名称。
 ]]></content>
       <tags>
         <tag>tags</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机名：你是来找茬的吧</title>
-    <url>/post/7e327e06498d/index.html</url>
-    <content><![CDATA[<meta name='description' content='该文章讲述了有关计算机名的基本概念，以及如何强制性修改计算机名的方法。（欢迎进站访问|´・ω・) ノ）'>
-
-<p><em>X:\Users\Admin-cmd\Hexo-Files\003&gt;copy con title.md</em></p>
-<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><p><a href="https://www.bilibili.com/video/BV1q7421K7zC/" title="https://www.bilibili.com/video/BV1q7421K7zC/">BiliBili</a></p>
-<h2 id="关于计算机名"><a href="#关于计算机名" class="headerlink" title="关于计算机名"></a>关于计算机名</h2><p>计算机名用于在网络中标识计算机的一种方式</p>
-<p>计算机名一般与 hostname (主机名)相同</p>
-<p>由于NETBIOS协议的限制，一般电脑的hostname不能超过15字符(十六字节的缓冲区里，第16个字符必须为NULL)。</p>
-<p>同时，计算机名仍有特殊字符限制，例如：~!@#$%^&amp;*()&lt;&gt;?:”{}[];’|&#x2F;., 等</p>
-<p>计算机名位于注册表以下的几个位置: (经过筛选)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HKLM\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName[ComputerName]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName[ComputerName]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Services\Eventlog[ComputerName]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters[NV Hostname]</span><br><span class="line">HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters[Hostname]</span><br></pre></td></tr></table></figure>
-
-<p>更改这些注册表，可以强制修改计算机名。</p>
-<hr>
-<h2 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h2><p>为此，我特意写了一个程序</p>
-<p> <a href="https://admincmd.lanzout.com/iCiEf1muu1lg" title="Title">蓝奏云</a> </p>
-<p>使用此程序可以强制性修改计算机名</p>
-<p><img src="/IMG/3_0.PNG" alt=" File : /IMG/3_0.PNG"></p>
-<p>!!! warning 警告<br>    一定要用管理员启动！<br>    请在打开前关闭杀毒软件。<br>    在实体机上运行导致系统损坏，自行负责。</p>
-<h3 id="1-有特殊字符，不超过-15-字符限制"><a href="#1-有特殊字符，不超过-15-字符限制" class="headerlink" title="1 有特殊字符，不超过 15 字符限制"></a>1 有特殊字符，不超过 15 字符限制</h3><p>在修改后，计算机没有任何异常。</p>
-<p>重启试逝</p>
-<p>在 Windows 登录界面，出现’密码不正确’的提示。<br>但是这个用户没有设置密码</p>
-<pre><code>推测原因: 计算机管理读取配置时读取到反斜杠导致用户校验失败，从而出现&#39;密码不正确&#39;
-</code></pre>
-<h3 id="2-有特殊字符，超过-15-字符限制"><a href="#2-有特殊字符，超过-15-字符限制" class="headerlink" title="2 有特殊字符，超过 15 字符限制"></a>2 有特殊字符，超过 15 字符限制</h3><p>在修改后，控制面板已经无法打开</p>
-<p>应用程序因’无足够内存’而无法打开</p>
-<p>电源选项失效</p>
-<p>命令提示符正常，但 shutdown 无法重启、关机</p>
-<pre><code>推测: shutdown 识别到错误的计算机名，导致无法对目标计算机 (本机) 进行电源操作
-</code></pre>
-<p>重启后蓝屏</p>
-<pre><code>推测: 因为 NETBIOS 协议的 15 字符限制，导致 Windows 读取计算机名时被截断，从而引发蓝屏
-</code></pre>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li>CSDN - haiross - windows 通过修改注册表来修改主机名</li>
-</ol>
-<p><em>已复制</em>     <em>1 个文件。</em></p>
-<p><em>X:\Users\Admin-cmd\Hexo-Files\003&gt;_</em></p>
-]]></content>
-      <categories>
-        <category>玩转系统</category>
-      </categories>
-      <tags>
-        <tag>tags</tag>
-        <tag>windows</tag>
-        <tag>胡改</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>瞎搞向 - 让一个文件夹里有多个“同名”文件（水）</title>
-    <url>/post/1b5d7e144ce7/index.html</url>
-    <content><![CDATA[<meta name='description' content='（水）本文介绍了如何让一个文件夹里有多个“同名”文件。（欢迎进站访问|´・ω・) ノ）'>
-（水）
-
-<h2 id="预览图"><a href="#预览图" class="headerlink" title="预览图"></a>预览图</h2><p><img src="https://s2.loli.net/2024/09/20/yho8A4PB6pSDFMW.png" alt="1.png"></p>
-<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="创建文件"><a href="#创建文件" class="headerlink" title="创建文件"></a>创建文件</h3><p>首先，我们往一个文件夹丢几个文件<br>，这里以a.ini 、b.ini、c.ini替代</p>
-<p>然后，新建一个文本文件，名叫 desktop.ini</p>
-<h3 id="修改文件"><a href="#修改文件" class="headerlink" title="修改文件"></a>修改文件</h3><p>写入以下内容</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[LocalizedFileNames]</span></span><br><span class="line"><span class="attr">a.ini</span>=d</span><br><span class="line"><span class="attr">b.ini</span>=d</span><br><span class="line"><span class="attr">c.ini</span>=d </span><br></pre></td></tr></table></figure>
-<p>语法</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[LocalizedFileNames]</span></span><br><span class="line"><span class="section">[原始文件名]</span>=<span class="section">[显示文件名]</span></span><br><span class="line"><span class="comment">;</span></span><br></pre></td></tr></table></figure>
-
-<p>注：原始文件名需包括扩展名，显示文件名不需<br>且无法修改显示文件名扩展名</p>
-<p>搞完后保存退出</p>
-<p>重启下资源管理器，或者电脑重启下，或者注销都行</p>
-<p>就可以看到效果了</p>
-<h2 id="附注"><a href="#附注" class="headerlink" title="附注"></a>附注</h2><p>这个只是更改你看到的，原始文件名不变</p>
-<p>例如：使用命令提示符执行<code>dir</code>可以看到</p>
-<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"> E:\一个有几个相同文件名的文件的文件夹 的目录</span><br><span class="line"></span><br><span class="line">2024/08/21  09:24    &lt;DIR&gt;          .</span><br><span class="line">2024/08/21  09:24    &lt;DIR&gt;          ..</span><br><span class="line">2024/08/21  09:20                 7 a.ini</span><br><span class="line">2024/08/21  09:21                 7 b.ini</span><br><span class="line">2024/08/21  09:21                 7 c.ini</span><br><span class="line">               3 个文件             21 字节</span><br><span class="line">               2 个目录 1,661,417,754,624 可用字节</span><br><span class="line"></span><br><span class="line">E:\一个有几个相同文件名的文件的文件夹&gt;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>玩转系统</category>
-        <category>文件</category>
-      </categories>
-      <tags>
-        <tag>Windows</tag>
-        <tag>文件</tag>
-        <tag>DESKTOP.INI</tag>
       </tags>
   </entry>
 </search>

@@ -2,7 +2,83 @@
 /*
 */
 // debugger;
+/**
+ * 判断是否启用调试模式（支持多维度检测）
+ * @returns {boolean} 是否调试模式
+ * 
+ * 检测优先级（可配置）：
+ * 1. URL 参数 (默认检测 debug/test/dev)
+ * 2. localStorage 标志
+ * 3. 域名白名单 (如 localhost)
+ * 4. 控制台动态激活（开发者工具）
+ */
+const DebugMode = (() => {
+    // 配置对象（可根据项目需求调整）
+    const config = {
+      urlParams: ['debug', 'test', 'dev'],  // 触发调试的URL参数
+      localStorageKey: 'debug_mode',        // localStorage存储键
+      hostWhitelist: ['localhost', '127.0.0.1'], // 域名白名单
+      consoleActive: true,                  // 是否检测控制台开启状态
+      forceDebug: false                     // 强制开启调试模式（构建时注入）
+    };
+  
+    // 内部状态缓存
+    let isDebug = config.forceDebug;
+  
+    // 检测URL参数
+    const checkURLParams = () => {
+      const params = new URLSearchParams(window.location.search);
+      return config.urlParams.some(param => 
+        params.has(param) || 
+        params.get(param) === 'true'
+      );
+    };
+  
+    // 检测本地存储
+    const checkLocalStorage = () => {
+      return localStorage.getItem(config.localStorageKey) === 'true';
+    };
+  
+    // 检测域名白名单
+    const checkHost = () => {
+      return config.hostWhitelist.includes(window.location.hostname);
+    };
+  
+    // 检测控制台激活
+    const checkConsole = () => {
+      if (!config.consoleActive) return false;
+      const consoleElem = document.createElement('div');
+      consoleElem.style.position = 'fixed';
+      consoleElem.style.zIndex = '-9999';
+      document.body.appendChild(consoleElem);
+      const isOpen = consoleElem.offsetParent === null;
+      document.body.removeChild(consoleElem);
+      return isOpen;
+    };
+  
+    // 综合判断
+    const checkAll = () => {
+      return checkURLParams() || 
+             checkLocalStorage() || 
+             checkHost() || 
+             checkConsole() || 
+             config.forceDebug;
+    };
+  
+    // 初始化检测
+    isDebug = checkAll();
+  
+    // 暴露公共方法
+    return {
+      get: () => isDebug,
+      enable: () => { isDebug = true },
+      disable: () => { isDebug = false },
+      config: (newConfig) => Object.assign(config, newConfig)
+    };
+  })();
 
+
+const debug = isDeBug(); // 开启调试模式
 
 // 设置主循环模块
 update();
@@ -135,6 +211,8 @@ JSDoc 注释以 \/** 开始，以 *\/ 结束，每行以 * 开头。注释中可
 
 // 邢昭博是个大傻逼，他居然把自己的名字写成了邢昭博，这简直就是个笑话。(AI 生成)
 
+
+
 // 主循环模块 ----------------------------------------------------
 
 /**
@@ -158,11 +236,71 @@ function update() {
 }
 
 
+// 消息窗口 ----------------------------------------------------
+
+/**
+ * 消息窗口对象
+ */
+var messageWin = {
+    /** 定时器标识 */
+    DKtime: null,
+
+    /**
+     * 打开消息窗口
+     * @param {string} title 主标题
+     * @param {string} content 下附文本
+     * @param {boolean} xh 是否将背景高斯模糊
+     * @param {number} DKtime 显示超时时间，单位ms
+     * @return {boolean} true -- 已成功打开 false -- 移动端，将打开Snackbar提示
+     */
+    show(title, content, DKtime, xh) {
+        if (isMobile()) {
+            Snackbar.show({
+                text: content,
+                actionText: '知道了',
+                duration: 4000,
+                actionTextColor: '#fff',
+            });
+        } else {
+            if (DKtime == 0 || DKtime == undefined || DKtime == null) {
+                DKtime = setTimeout(messageWin.close(), DKtime);
+            }
+            try {
+                if (xh) {
+                    // 模糊其他
+                    document.getElementById("web").style = "filter: blur(100px);pointer-events: none;opacity: 0.7;";
+                    // 定义模糊和禁用的类 全局模糊和禁用
+                }
+                document.getElementById("timeWin").style.display = "";
+                document.getElementById("timeWin").innerHTML =
+                `
+                <p style="font-size:30px;color:#2F7AA1;text-align: center;">${title}</p>
+                <p style="font-size:16px;color:#003152;text-align: center;">${content}</p>
+                <br />
+                <a class="closeWinbox" href="javascript:messageWin.close()" id="closeWin">关闭</a>
+                <br />
+
+                `;
+            } catch (error) {
+                console.error('打开消息窗口时发生错误:', error);
+            }
+        }
+    },
+
+    /**
+     * 关闭消息窗口
+     */
+    close() {
+        document.getElementById("timeWin").style.display = "none";
+        document.getElementById("web").style = "";// 取消模糊
+        clearTimeout(messageWin.DKtime);
+    }
+};
+
+
 // 欢迎语，cookie 提醒 --------------------------------------------
 // 首次访问，弹出Cookie提醒    
-console.log(`农历年份: ${lunarDate.lunarYear}`);
-console.log(`农历月份: ${lunarDate.lunarMonth}`);
-console.log(`农历日期: ${lunarDate.lunarDay}`);
+
 console.log("农历日期:", lunarDateChinese);
 try {
     switch (md) { // 公历判断
@@ -261,6 +399,12 @@ try {
         default:
             break;
     } // 农历判断
+
+    if (isDeBug()) {
+        DText = `调试模式`
+        Text = `管他，祝今天代码不出Error！`
+    }
+
     if (DText == "0") {// 其他不弹窗的情况放在这里
         // 如果没有匹配的节日，直接返回
     } else {
@@ -294,7 +438,6 @@ try {
 ipLoacation = window.saveToLocal.get('ipLocation');
 if (ipLoacation == undefined) {
     // 数据已过期或不存在
-    var txkey = 'ET6BZ-DDXEN-JRBFT-SZEUP-WBLXS-V7FGJ';
     // ttttttttttttttttttt
     var script = document.createElement('script');
     var url = `https://apis.map.qq.com/ws/location/v1/ip?key=${txkey}&output=jsonp`;
@@ -311,27 +454,13 @@ if (ipLoacation == undefined) {
     // 使用 ipLocation
 }
 
-function getDistanceAMLS(e1, n1, e2, n2) {
-    const R = 6371
-    const { sin, cos, asin, PI, hypot } = Math
-    let getPoint = (e, n) => {
-        e *= PI / 180
-        n *= PI / 180
-        return { x: cos(n) * cos(e), y: cos(n) * sin(e), z: sin(n) }
-    }
 
-    let a = getPoint(e1, n1)
-    let b = getPoint(e2, n2)
-    let c = hypot(a.x - b.x, a.y - b.y, a.z - b.z)
-    let r = asin(c / 2) * 2 * R
-    return Math.round(r);
-}
 let dist = getDistanceAMLS(114.305000, 30.592800, ipLoacation.result.location.lng, ipLoacation.result.location.lat)
 let pos = ipLoacation.result.ad_info.nation;
 let ip = ipLoacation.result.ip;
 let ipDZ;
 let posdesc;//要显示的信息
-let ass = "小伙伴";
+let ass = visitor_address;
 
 //根据国家、省份、城市信息自定义欢迎语
 //海外地区不支持省份及城市信息
@@ -442,7 +571,6 @@ switch (ipLoacation.result.ad_info.nation) {
                 switch (ipLoacation.result.ad_info.city) {
                     case "武汉市":
                         posdesc = "哟，我也住在武汉市。大江大河大武汉，走，吃热干面去！";
-                        ass = "老乡";
                         break;
                     case "咸宁市":
                         posdesc = "我老家在咸宁。";
@@ -523,6 +651,9 @@ else timeChange = "都几点了，还在熬夜？";
 // 检查 welcome-info 是否存在
 const welcomeInfoElement = document.getElementById("welcome-info");
 if (!welcomeInfoElement) { }
+
+if (zz_city == ipLoacation.result.ad_info.city) ass = zz_address_lx; // 检查是否为配置中指定的位置，如果是，则替换默认的"小伙伴"
+
 //自定义文本需要放的位置
 welcomeInfoElement.innerHTML = `欢迎来自<span>${pos}</span>的${ass}，${timeChange}<br />你距我约有<span>${dist}</span>公里，${posdesc}，您的 IP 地址是 ${ip}`;
 if (sessionStorage.getItem("popCookieWindow") != "0") {
@@ -649,331 +780,7 @@ if (getCookie('browsertc') != 1) {
 // 
 
 
-// 右键菜单 
-//--------------------------------------------------------------------------
-//22.12.8 update：add mask
-//22.12.9 update: add search in this page
 
-// ------
-function setMask() {//设置遮罩层
-    if (document.getElementsByClassName("rmMask")[0] != undefined) {
-        return document.getElementsByClassName("rmMask")[0];
-    }
-    mask = document.createElement('div');
-    mask.className = "rmMask";
-    mask.style.width = window.innerWidth + 'px';
-    mask.style.height = window.innerHeight + 'px';
-    mask.style.background = '#fff';
-    mask.style.opacity = '.0';
-    mask.style.position = 'fixed';
-    mask.style.top = '0';
-    mask.style.left = '0';
-    mask.style.zIndex = 998;
-    document.body.appendChild(mask);
-    document.getElementById("rightMenu").style.zIndex = 19198;
-    return mask;
-}
-
-function insertAtCursor(myField, myValue) {
-
-    //IE 浏览器
-    if (document.selection) {
-        myField.focus();
-        sel = document.selection.createRange();
-        sel.text = myValue;
-        sel.select();
-    }
-
-    //FireFox、Chrome等
-    else if (myField.selectionStart || myField.selectionStart == '0') {
-        var startPos = myField.selectionStart;
-        var endPos = myField.selectionEnd;
-
-        // 保存滚动条
-        var restoreTop = myField.scrollTop;
-        myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
-
-        if (restoreTop > 0) {
-            myField.scrollTop = restoreTop;
-        }
-
-        myField.focus();
-        myField.selectionStart = startPos + myValue.length;
-        myField.selectionEnd = startPos + myValue.length;
-    } else {
-        myField.value += myValue;
-        myField.focus();
-    }
-}
-let rmf = {};
-rmf.showRightMenu = function (isTrue, x = 0, y = 0) {
-    let $rightMenu = $('#rightMenu');
-    $rightMenu.css('top', x + 'px').css('left', y + 'px');
-
-    if (isTrue) {
-        $rightMenu.show();
-    } else {
-        $rightMenu.hide();
-    }
-}
-rmf.switchDarkMode = function () { // 切换暗黑模式，执行位置
-    const nowMode = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
-    if (nowMode === 'light') {
-        SwichActivateDarkMode()
-        saveToLocal.set('theme', 'dark', 2)
-        GLOBAL_CONFIG.Snackbar !== undefined && btf.snackbarShow(GLOBAL_CONFIG.Snackbar.day_to_night)
-    } else {
-        SwitchActivateLightMode()
-        saveToLocal.set('theme', 'light', 2)
-        GLOBAL_CONFIG.Snackbar !== undefined && btf.snackbarShow(GLOBAL_CONFIG.Snackbar.night_to_day)
-    }
-    // handle some cases
-    typeof utterancesTheme === 'function' && utterancesTheme()
-    typeof FB === 'object' && window.loadFBComment()
-    window.DISQUS && document.getElementById('disqus_thread').children.length && setTimeout(() => window.disqusReset(), 200)
-};
-rmf.yinyong = function () {
-    var e = document.getElementsByClassName("el-textarea__inner")[0],
-        t = document.createEvent("HTMLEvents");
-    t.initEvent("input", !0, !0), e.value = d.value = "> " + getSelection().toString() + "\n\n", e.dispatchEvent(t);
-    console.log(getSelection().toString());
-    document.getElementsByClassName("el-textarea__inner")[0].value = "> " + getSelection().toString() + "\n\n";
-    Snackbar.show({
-        text: '为保证最佳评论阅读体验，建议不要删除空行',
-        pos: 'top-center',
-        showAction: false,
-    })
-}
-rmf.copyWordsLink = function () {
-    let url = window.location.href
-    let txa = document.createElement("textarea");
-    txa.value = url;
-    document.body.appendChild(txa)
-    txa.select();
-    document.execCommand("Copy");
-    document.body.removeChild(txa);
-    Snackbar.show({
-        text: '链接复制成功！',
-        pos: 'top-right',
-        showAction: false
-    });
-}
-rmf.switchReadMode = function () {
-    const $body = document.body
-    $body.classList.add('read-mode')
-    const newEle = document.createElement('button')
-    newEle.type = 'button'
-    newEle.className = 'fas fa-sign-out-alt exit-readmode'
-    $body.appendChild(newEle)
-
-    function clickFn() {
-        $body.classList.remove('read-mode')
-        newEle.remove()
-        newEle.removeEventListener('click', clickFn)
-    }
-
-    newEle.addEventListener('click', clickFn)
-}
-
-//复制选中文字
-rmf.copySelect = function () {
-    document.execCommand('Copy', false, null);
-    Snackbar.show({
-        text: '已占领剪贴板！',
-        pos: 'top-right',
-        showAction: false
-    });
-}
-
-//回到顶部
-rmf.scrollToTop = function () {
-    document.getElementsByClassName("menus_items")[1].setAttribute("style", "");
-    document.getElementById("name-container").setAttribute("style", "display:none");
-    btf.scrollToDest(0, 500);
-}
-rmf.translate = function () {
-    document.getElementById("translateLink").click();
-}
-rmf.searchinThisPage = () => {
-    document.body.removeChild(mask);
-    document.getElementsByClassName("local-search-box--input")[0].value = window.getSelection().toString()
-    document.getElementsByClassName("search")[0].click()
-    var evt = document.createEvent("HTMLEvents"); evt.initEvent("input", false, false); document.getElementsByClassName("local-search-box--input")[0].dispatchEvent(evt);
-}
-document.body.addEventListener('touchmove', function (e) {
-
-}, { passive: false });
-function popupMenu() {
-    //window.oncontextmenu=function(){return false;}
-    window.oncontextmenu = function (event) {
-        if (event.ctrlKey || document.body.clientWidth < 900) return true;
-        $('.rightMenu-group.hide').hide();
-        if (document.getSelection().toString()) {
-            $('#menu-text').show();
-        }
-        if (document.getElementById('post')) {
-            $('#menu-post').show();
-        } else {
-            if (document.getElementById('page')) {
-                $('#menu-post').show();
-            }
-        }
-        var el = window.document.body;
-        el = event.target;
-        var a = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/
-        if (a.test(window.getSelection().toString()) && el.tagName != "A") {
-            $('#menu-too').show()
-        }
-        if (el.tagName == 'A') {
-            $('#menu-to').show()
-            rmf.open = function () {
-                if (el.href.indexOf("http://") == -1 && el.href.indexOf("https://") == -1 || el.href.indexOf("blog.admincmd.xyz") != -1) {
-                    pjax.loadUrl(el.href)
-                }
-                else {
-                    location.href = el.href
-                }
-            }
-            rmf.openWithNewTab = function () {
-                window.open(el.href);
-                // window.location.reload();
-            }
-            rmf.copyLink = function () {
-                let url = el.href
-                let txa = document.createElement("textarea");
-                txa.value = url;
-                document.body.appendChild(txa)
-                txa.select();
-                document.execCommand("Copy");
-                document.body.removeChild(txa);
-            }
-        }
-        if (el.tagName == 'IMG') {
-            $('#menu-img').show()
-            rmf.openWithNewTab = function () {
-                window.open(el.src);
-                // window.location.reload();
-            }
-            rmf.click = function () {
-                el.click()
-            }
-            rmf.copyLink = function () {
-                let url = el.src
-                let txa = document.createElement("textarea");
-                txa.value = url;
-                document.body.appendChild(txa)
-                txa.select();
-                document.execCommand("Copy");
-                document.body.removeChild(txa);
-            }
-            rmf.saveAs = function () {
-                var a = document.createElement('a');
-                var url = el.src;
-                var filename = url.split("/")[-1];
-                a.href = url;
-                a.download = filename;
-                a.click();
-                window.URL.revokeObjectURL(url);
-            }
-        } else if (el.tagName == "TEXTAREA" || el.tagName == "INPUT") {
-            $('#menu-paste').show();
-            // rmf.paste=function(){
-            //     input.addEventListener('paste', async event => {
-            //         event.preventDefault();
-            //         const text = await navigator.clipboard.readText();
-            //         el.value+=text;
-            //       });
-            // }
-            rmf.paste = function () {
-                navigator.permissions
-                    .query({
-                        name: 'clipboard-read'
-                    })
-                    .then(result => {
-                        if (result.state == 'granted' || result.state == 'prompt') {
-                            //读取剪贴板
-                            navigator.clipboard.readText().then(text => {
-                                console.log(text)
-                                insertAtCursor(el, text)
-                            })
-                            Snackbar.show({
-                                text: '粘贴成功！',
-                                pos: 'top-right',
-                                showAction: false
-                            });
-                        } else {
-                            Snackbar.show({
-                                text: 'ERROR: 读取剪贴板失败，请允许访问剪贴板！',
-                                pos: 'top-center',
-                                showAction: false,
-                            })
-                        }
-                    })
-            }
-        }
-        let pageX = event.clientX + 10;
-        let pageY = event.clientY;
-        let rmWidth = $('#rightMenu').width();
-        let rmHeight = $('#rightMenu').height();
-        if (pageX + rmWidth > window.innerWidth) {
-            pageX -= rmWidth + 10;
-        }
-        if (pageY + rmHeight > window.innerHeight) {
-            pageY -= pageY + rmHeight - window.innerHeight;
-        }
-        mask = setMask();
-        window.onscroll = () => {
-            rmf.showRightMenu(false);
-            window.onscroll = () => { }
-            document.body.removeChild(mask);
-        }
-        $(".rightMenu-item").click(() => {
-            document.body.removeChild(mask);
-        })
-        $(window).resize(() => {
-            rmf.showRightMenu(false);
-            document.body.removeChild(mask);
-        })
-        mask.onclick = () => {
-            document.body.removeChild(mask);
-        }
-        rmf.showRightMenu(true, pageY, pageX);
-        return false;
-    };
-
-    window.addEventListener('click', function () {
-        rmf.showRightMenu(false);
-    });
-}
-if (!(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-    popupMenu()
-}
-const box = document.documentElement
-
-function addLongtabListener(target, callback) {
-    let timer = 0 // 初始化timer
-
-    target.ontouchstart = () => {
-        timer = 0 // 重置timer
-        timer = setTimeout(() => {
-            callback();
-            timer = 0
-        }, 380) // 超时器能成功执行，说明是长按
-    }
-
-    target.ontouchmove = () => {
-        clearTimeout(timer) // 如果来到这里，说明是滑动
-        timer = 0
-    }
-
-    target.ontouchend = () => { // 到这里如果timer有值，说明此触摸时间不足380ms，是点击
-        if (timer) {
-            clearTimeout(timer)
-        }
-    }
-}
-
-addLongtabListener(box, popupMenu)
 
 
 // 明亮/暗黑模式切换
@@ -1281,21 +1088,58 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 // APlayer 播放器 --------------------------------------------
 
-// function dp() { return null; }
-// window.ap1 = new APlayer({
-//     container: document.getElementById('aplayer'),
-//     theme: '#F57F17',
-//     fixed: true,
-//     lrcType: 3,
-//     audio: [],
-// });
 
 
 // 进度条模块 ------------------------------
 
-document.getElementsByClassName(`time-progress`).innerHTML = `
-<!DOCTYPE html><html>\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<link rel="stylesheet" href="\favi\qq.css">\n</head>\n<body>\n<div class="progress-container">\n  <div class="progress-label" id="time-flies">\n本年过了 <span id="year-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="year-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本月过了 <span id="month-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="month-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本天过了 <span id="day-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="day-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本小时过了 <span id="hour-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="hour-progress-bar">\n</div>\n  </div>\n</div>\n<div class="progress-container">\n  <div class="progress-label">\n本分钟过了 <span id="minute-progress">\n0.00000%</span>\n</div>\n  <div class="progress-bar">\n    <div class="progress-bar-inner" id="minute-progress-bar">\n</div>\n  </div>\n</div>\n<script src="\favi\qq.js">\n</script>\n<p>\n珍惜时间，时光飞逝。</p>\n</body>\n</html>\n
-`
+document.getElementsByClassName('time-progress').innerHTML = `
+<div class="progress-container">
+    <div class="progress-label">
+        本年过了 <span class="year-progress">0.00000%</span>
+    </div>
+    <div class="progress-bar">
+        <div  class="year-progress-bar"></div>
+    </div>
+</div>
+
+<div class="progress-container">
+    <div class="progress-label">
+        本月过了 <span class="month-progress">0.00000%</span>
+    </div>
+    <div class="progress-bar">
+        <div  class="month-progress-bar"></div>
+    </div>
+</div>
+
+<div class="progress-container">
+    <div class="progress-label">
+        本天过了 <span class="day-progress">0.00000%</span>
+    </div>
+    <div class="progress-bar">
+        <div class="day-progress-bar"></div>
+    </div>
+</div>
+
+<div class="progress-container">
+    <div class="progress-label">
+        本小时过了 <span class="hour-progress">0.00000%</span>
+    </div>
+    <div class="progress-bar">
+        <div class="hour-progress-bar"></div>
+    </div>
+</div>
+
+<div class="progress-container">
+    <div class="progress-label">
+        本分钟过了 <span class="minute-progress">0.00000%</span>
+    </div>
+    <div class="progress-bar">
+        <div class="minute-progress-bar"></div>
+    </div>
+</div>
+
+<p>珍惜时间，时光飞逝。</p>
+`;
 
 function updateProgressBars() {
     try {
@@ -1370,63 +1214,62 @@ function isUrl(url) {
     }
 }
 
-// 消息窗口 ----------------------------------------------------
 
 /**
- * 消息窗口对象
+ * 判断是否是调试模式
+ * @returns {boolean} true: 是调试模式 false: 不是调试模式
  */
-let messageWin = {
-    /** 定时器标识 */
-    DKtime: null,
-};
-
-/**
- * 打开消息窗口
- * @param {string} title 主标题
- * @param {string} content 下附文本
- * @param {boolean} xh 是否将背景高斯模糊
- * @param {number} DKtime 显示超时时间，单位ms
- * @return {boolean} true -- 已成功打开 false -- 移动端，将打开Snackbar提示
- */
-messageWin.show = function (title, content, DKtime, xh) {
-    if (isMobile()) {
-        Snackbar.show({
-            text: content,
-            actionText: '知道了',
-            duration: 4000,
-            actionTextColor: '#fff',
-        });
+function isDeBug() {
+    if (DebugMode.get()) {
+        console.log('调试模式已激活');
+        window.__DEBUG__ = true; // 暴露全局标志
+        return true;
     } else {
-        if (DKtime = 0 || DKtime == undefined || DKtime == null) {
-            DKtime = setTimeout(messageWin.close(), DKtime);
-        }
-        try {
-            if (xh) {
-                // 模糊其他
-                document.getElementById("web").style = "filter: blur(100px);pointer-events: none;opacity: 0.7;";
-                // 定义模糊和禁用的类 全局模糊和禁用
-            }
-            document.getElementById("timeWin").innerHTML =
-                `
-            <div class="win" id="win">
-                <p style="font-size:30px;color:#2F7AA1;text-align: center;">${title}</p>
-                <p style="font-size:16px;color:#003152;text-align: center;">${content}</p>
-                <br />
-                <a class="closeWinbox" href="javascript:messageWin.close()" id="closeWin">关闭</a>
-                <br />
-            </div>
-            `;
-        } catch (error) {
-            console.error('打开消息窗口时发生错误:', error);
-        }
+        return false;
     }
 }
 
 /**
- * 关闭消息窗口
+ * 计算地球两经纬度之间的地面距离
+ * @param {number} e1 1 点经度
+ * @param {number} n1 1 点纬度
+ * @param {number} e2 2 点经度
+ * @param {number} n2 2 点纬度
+ * @returns 2 点之间的地面距离，单位 KM
  */
-messageWin.close = function () {
-    document.getElementById("win").style.display = "none";
-    document.getElementById("web").style = "";// 取消模糊
-    clearTimeout(messageWin.DKtime);
+function getDistanceAMLS(e1, n1, e2, n2) {
+    const R = 6371
+    const { sin, cos, asin, PI, hypot } = Math
+    let getPoint = (e, n) => {
+        e *= PI / 180
+        n *= PI / 180
+        return { x: cos(n) * cos(e), y: cos(n) * sin(e), z: sin(n) }
+    }
+
+    let a = getPoint(e1, n1)
+    let b = getPoint(e2, n2)
+    let c = hypot(a.x - b.x, a.y - b.y, a.z - b.z)
+    let r = asin(c / 2) * 2 * R
+    return Math.round(r);
+}
+
+/**
+ * 设置字体
+ * @param {string} font 字体在 CSS 中的名称
+ * @returns 是否设置成功
+ * @example setFont('Arial'); // 设置字体为 Arial
+ */
+function setFont(font) {
+    try {
+        if (typeof font !== 'string' || font.trim() === '') {
+            console.error('无效的字体参数: ', font); // 错误处理
+            return false;
+        }
+        document.body.style.fontFamily = font; // 根据传入的font参数，动态修改body的字体样式
+        localStorage.setItem('font', font); // 将字体参数保存到localStorage
+        return true;
+    } catch (error) {
+        console.error('设置字体过程中出错:', error);
+        return false;
+    }
 }
