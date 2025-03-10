@@ -78,7 +78,7 @@ const DebugMode = (() => {
   })();
 
 
-const debug = isDeBug(); // 开启调试模式
+const debug = false;//isDeBug(); // 开启调试模式
 
 // 设置主循环模块
 update();
