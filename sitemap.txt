@@ -1,3 +1,6 @@
+https://blog.admincmd.xyz/post/fd3c32d782e1/index.html
+https://blog.admincmd.xyz/post/1c266b27fd7a/index.html
+https://blog.admincmd.xyz/about/index.html
 https://blog.admincmd.xyz/post/9c6638ed5477/index.html
 https://blog.admincmd.xyz/post/a185aa1edea9/index.html
 https://blog.admincmd.xyz/post/46c3016e9ba9/index.html
@@ -58,6 +61,8 @@ https://blog.admincmd.xyz/tags/%E7%AA%97%E5%8F%A3/
 https://blog.admincmd.xyz/tags/%E8%A7%86%E9%A2%91%E5%A3%81%E7%BA%B8%E5%AE%9E%E7%8E%B0/
 https://blog.admincmd.xyz/tags/%E7%BD%91%E7%BB%9C/
 https://blog.admincmd.xyz/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/
+https://blog.admincmd.xyz/tags/IPv6/
+https://blog.admincmd.xyz/tags/RDP-%E8%BF%9C%E6%A1%8C/
 https://blog.admincmd.xyz/categories/%E6%95%99%E7%A8%8B/
 https://blog.admincmd.xyz/categories/Windows/
 https://blog.admincmd.xyz/categories/%E9%AD%94%E6%94%B9/
@@ -69,3 +74,4 @@ https://blog.admincmd.xyz/categories/%E9%AD%94%E6%94%B9/Windows-%E5%BC%95%E5%AF%
 https://blog.admincmd.xyz/categories/%E7%8E%A9%E8%BD%AC%E7%B3%BB%E7%BB%9F/%E6%96%87%E4%BB%B6/
 https://blog.admincmd.xyz/categories/%E7%BD%91%E7%BB%9C/
 https://blog.admincmd.xyz/categories/%E7%BD%91%E7%BB%9C/%E8%BF%9C%E7%A8%8B%E5%BC%80%E6%9C%BA/
+https://blog.admincmd.xyz/categories/RDP-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8C%97/
