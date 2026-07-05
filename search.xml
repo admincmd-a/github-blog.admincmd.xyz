@@ -1956,7 +1956,7 @@ C:\Users\Administrator&gt;_
 <div class="note info modern"><p>由于远程主机会一定程度上使用客户端的显示器配置，由于没有&gt;60FPS的显示器，故未测试高值的效果。</p>
 </div>
 
-
+<p>在 PowerShell 中执行下面的命令</p>
 <figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set-ItemProperty</span> <span class="literal">-Path</span> <span class="string">&#x27;HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\&#x27;</span> <span class="literal">-name</span> <span class="string">&#x27;DWMFRAMEINTERVAL&#x27;</span> <span class="literal">-Value</span> <span class="string">&#x27;15&#x27;</span></span><br></pre></td></tr></table></figure>
 
 
@@ -1970,14 +1970,15 @@ C:\Users\Administrator&gt;_
         <tag>网络</tag>
         <tag>IPv6</tag>
         <tag>RDP 远桌</tag>
+        <tag>Windows 远程桌面</tag>
       </tags>
   </entry>
   <entry>
     <title>RDP 使用指北 - IPv6 的连接设置</title>
     <url>/post/fd3c32d782e1/index.html</url>
-    <content><![CDATA[<div class="note default simple"><p>本文受众：想让自己的电脑从全世界任何地方都能被连上还不想怎么花钱的勇士&#x2F;莽夫</p>
+    <content><![CDATA[<div class="note default simple"><p>本文受众：想让自己的电脑从全世界任何地方都能被连上还不想怎么花钱的勇士&#x2F;莽夫，这位勇士&#x2F;莽夫还应当具备一定的计算机能力和动手能力。</p>
 </div>
-<div class="note default simple"><p>本文是 <a href="/categories/RDP-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8C%97/">RDP 使用指北</a> 的文章之一，有关更多信息，可以访问该分类。</p>
+<div class="note default simple"><p>本文是 <a href="/categories/RDP-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8C%97/">RDP 使用指北</a> 的文章之一，有关更多信息，以及如何使用 RDP，可以访问该分类。</p>
 </div>
 <div class="note info modern"><p>本文仅供技术交流，请自行评估公网暴露风险</p>
 </div>
@@ -2020,7 +2021,7 @@ C:\Users\Administrator&gt;_
  TCPIP 上的 NetBIOS  . . . . . . . : 已启用
 </code></pre>
 <p>一般而言，你的 IPv6 的前缀只要不是<code>fe80</code>或<code>fd00</code>，且是以<code>2xxx</code>或<code>3xxx</code>为前缀，那么应该是公网 IPv6 地址(全球单播地址, GUA)，具体可以访问 <a href="https://testipv6.cn/">IPv6 连接测试 </a>，如果网站显示的IPv6地址与你 <code>ipconfig</code> 中的 2xxx:xxxx 一致，那就是公网·真。</p>
-<div class="note info modern"><p>如果有临时 IPv6 地址，请在向公网暴露时优先使用它，该地址基于 RFC4941 不与设备绑定，且存在可控的生存时间，可以防止一定的开盒和攻击风险，建议使用 DDNS 来防止变动带来的影响。</p>
+<div class="note info modern"><p>如果有临时 IPv6 地址，请在向公网暴露时优先使用它，该地址基于 <a href="https://www.rfc-editor.org/info/rfc4941/">RFC4941</a>&#x2F;<a href="https://www.rfc-editor.org/info/rfc8981/">RFC 8981</a> 不与设备绑定，且存在可控的生存时间，可以防止一定的开盒和攻击风险，建议使用 DDNS 来防止变动带来的影响。</p>
 </div>
 
 <h3 id="开放路由器-光猫-IPv6"><a href="#开放路由器-光猫-IPv6" class="headerlink" title="开放路由器&#x2F;光猫 IPv6"></a>开放路由器&#x2F;光猫 IPv6</h3><p>如果你已经有了 IPv6 地址，那么这一步便可以忽略了，请直接去往<a href="#close-ipv6-b">关闭防火墙</a>。<br>如没有，你得参照下面的步骤好好看一下那出了问题，导致你没有跟上时代的步伐.</p>
@@ -2028,7 +2029,7 @@ C:\Users\Administrator&gt;_
 <div class="note modern"><p>如果这一步你的设备没有 IPv4 地址（或者为 169 开头），无法连接网络时，那么你的拨号设备应该是你的路由器，就不要找光猫了。</p>
 </div>
 
-<h4 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h4><p>进入你的路由器管理后台，查找是否有 IPv6 的设置，如果有，把它打开，配置为 DHCPv6 或自动获取。如果没有，请检查你的路由器是否过旧，导致无法使用 IPv6，可以前往搜索引擎搜索你的路由器是否支持使用 IPv6。</p>
+<h4 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h4><p>进入你的路由器管理后台，查找是否有 IPv6 的设置，如果有，把它打开，配置为 DHCPv6 或自动获取。如果没有，请检查你的路由器是否过旧，导致无法使用 IPv6，可以前往搜索引擎搜索你的路由器是否支持使用 IPv6，如不支持，请尝试升级软件或买个新的（或者不会过时的软路由）。</p>
 <div class="note modern"><p>如果你的路由器是拨号设备，若支持 IPv6，请检查你的 IPv6 拨号是否打开。</p>
 </div>
 
@@ -2115,6 +2116,254 @@ TcpTestSucceeded : True
         <tag>网络</tag>
         <tag>IPv6</tag>
         <tag>RDP 远桌</tag>
+        <tag>Windows 远程桌面</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>有关临时 IPv6 地址的管理和查看</title>
+    <url>/post/feda539d21ea/index.html</url>
+    <content><![CDATA[<div class="note default simple"><p>本文受众：具备一定计算机基础，知道命令行是个啥子。</p>
+</div>
+<div class="note info modern"><p>这是一篇附属文章，是对 RDP 使用指北的补充文章。<br>本文受众设备： Windows 10, Windows 11, Windows Server 2019, Windows Server 2022, Windows Server 2025</p>
+</div>
+
+<p><em>文章若有勘误，还请在评论区指正，还望谅解。</em></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>以我的计算机的 IPv6 配置为例：</p>
+<pre><code>以太网适配器 (虚拟设备) Microsoft Network Interface Card Teaming Controller:
+
+   连接特定的 DNS 后缀 . . . . . . . :
+   描述. . . . . . . . . . . . . . . : Microsoft Network Adapter Multiplexor Driver
+   物理地址. . . . . . . . . . . . . : ██-██-██-██-██-██
+   DHCP 已启用 . . . . . . . . . . . : 否
+   自动配置已启用. . . . . . . . . . : 是
+   IPv6 地址 . . . . . . . . . . . . : 2409:████:███:████:████:████:████:████(首选)
+   临时 IPv6 地址. . . . . . . . . . : 2409:████:███:████:████:████:████:████(首选)
+   本地链接 IPv6 地址. . . . . . . . : fe80::████:████:███:████%12(首选)
+   IPv4 地址 . . . . . . . . . . . . : 192.168.1.25(首选)
+   子网掩码  . . . . . . . . . . . . : 255.255.255.0
+   默认网关. . . . . . . . . . . . . : fe80::1%12
+                                       192.168.1.1
+   DHCPv6 IAID . . . . . . . . . . . : █████████
+   DHCPv6 客户端 DUID  . . . . . . . : ██-██-██-██-██-██-██-██-██-██-██-██-██-8A
+   DNS 服务器  . . . . . . . . . . . : 2a07:a8c0::75:58eb
+                                       2606:4700:4700::1111
+                                       2400:3200::1
+                                       2606:4700:4700::1001
+                                       119.29.29.29
+                                       8.8.8.8
+                                       211.137.58.20
+                                       1.1.1.1
+   主 WINS 服务器  . . . . . . . . . : 192.168.1.1
+   TCPIP 上的 NetBIOS  . . . . . . . : 已启用
+</code></pre>
+<p><em>*: 此文本已遮蔽部分敏感信息。</em><br> : <em>注：示例中的 DNS 列表仅为展示配置，实际生产环境<del>不建议</del>绝对不要设置过多 DNS 地址，会造成严重的性能问题。</em></p>
+<h2 id="关于临时-IPv6"><a href="#关于临时-IPv6" class="headerlink" title="关于临时 IPv6"></a>关于临时 IPv6</h2><p>由于众所周知的原因，IPv6 地址可以给几乎所有设备分配地址，所以带来了基于地址的隐私安全和暴露风险。为了解决这个问题，就产生了基于（伪）随机的 IPv6 地址规范来规避这种现象<br>临时 IPv6 地址最早于 <a href="https://www.rfc-editor.org/info/rfc4941/">RFC 4941</a> 提出，后被 <a href="https://www.rfc-editor.org/info/rfc8981/">RFC 8981</a> 所取代</p>
+<p>临时 IPv6 地址具有以下特点:</p>
+<ul>
+<li><strong>随机性</strong>：随机地址与 MAC 地址无关，具备；</li>
+<li><strong>难预测性</strong>：<a href="https://www.rfc-editor.org/info/rfc8981/">RFC 8981</a> 要求，临时 IPv6 地址的生成应该具备统计学上的难以预测性；</li>
+<li><strong>非长期性</strong>：<a href="https://www.rfc-editor.org/info/rfc8981/">RFC 8981</a> 要求，临时 IPv6 地址的使用应该是有期限的。</li>
+</ul>
+<p><a href="https://www.rfc-editor.org/info/rfc8981/">RFC 8981</a> 要求，应该默认启用临时 IPv6 地址，而旧规范 <a href="https://www.rfc-editor.org/info/rfc4941/">RFC 4941</a> 并未作此要求。</p>
+<p>以下使用建议仅代表个人观点，仅供参考，应该根据实际情况做决定。<br>在下面的情况应该使用临时 IPv6 地址：</p>
+<ul>
+<li>保证隐私和避免追踪;</li>
+<li>需要对外发起连接且不希望被长期跟踪时</li>
+<li>家用客户端；</li>
+<li>你想要的时候。</li>
+</ul>
+<p>在下面的情况不应使用临时 IPv6 地址：</p>
+<ul>
+<li><strong>服务器</strong>，服务器的地址在可以的情况下应该具有持久性。(附注：Windows Server 默认禁用)</li>
+<li>特殊的防火墙规则。</li>
+<li>需要对外提供稳定的服务</li>
+<li>你不想用的时候。</li>
+</ul>
+<p>临时地址与主地址在技术上均可作为出入站连接使用，操作系统在发起对外连接时，默认优先使用临时地址（Windows 的默认源地址选择策略），二者互不干扰</p>
+<h2 id="查看你的临时-IPv6-地址"><a href="#查看你的临时-IPv6-地址" class="headerlink" title="查看你的临时 IPv6 地址"></a>查看你的临时 IPv6 地址</h2><p>命令行执行</p>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ipconfig</span> /all</span><br></pre></td></tr></table></figure>
+
+<p>在对应网络适配器查找 <code>临时 IPv6 地址</code> 的字段，可以参考上文中的示例。</p>
+<h2 id="临时-IPv6-地址管理"><a href="#临时-IPv6-地址管理" class="headerlink" title="临时 IPv6 地址管理"></a>临时 IPv6 地址管理</h2><p>Windows 可以使用 NETSH 工具和 PowerShell 来管理临时 IPv6 地址</p>
+<blockquote>
+<p>由于 <code>NETSH</code> 已进入维护状态，请优先使用 PowerShell 进行管理。</p>
+<p>建议使用 Windows PowerShell 管理 Windows 和 Windows Server 中的网络技术，而不是 <code>netsh</code>。 </p>
+</blockquote>
+<h3 id="Windows-NETSH"><a href="#Windows-NETSH" class="headerlink" title="Windows NETSH"></a>Windows NETSH</h3><p>管理上下文位于 IPv6，管理临时地址的字段是 <code>privacy</code>，<code>NETSH</code> 工具可以使用命令简写。</p>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">netsh interface ipv6</span><br></pre></td></tr></table></figure>
+<p><em>关于本管理上下文的 Microsoft 文档，参见 <a href="https://learn.microsoft.com/zh-cn/windows-server/administration/windows-commands/netsh-interface">netsh interface | Microsoft Learn</a></em></p>
+<p><em>NETSH 提示符</em></p>
+<pre><code>netsh interface ipv6&gt;show pri
+查询活动状态...
+
+临时地址参数
+---------------------------------------------
+使用临时地址                        : enabled
+重复地址检测次数                    : 3
+最大有效寿命                        : 7d
+最大首选寿命                        : 1d
+重生成时间                          : 5s
+最大随机时间                        : 10m
+随机时间                            : 7m43s
+
+netsh interface ipv6&gt;set privacy
+此命令提供的语法不正确。请查看帮助以获取正确的语法信息。
+
+用法: set privacy [[state=]enabled|disabled] [[maxdadattempts=]&lt;integer&gt;]
+             [[maxvalidlifetime=]&lt;integer&gt;]
+             [[maxpreferredlifetime=]&lt;integer&gt;]
+             [[regeneratetime=]&lt;integer&gt;]
+             [[maxrandomtime=]&lt;integer&gt;]
+             [[store=]active|persistent]
+
+参数:
+
+       标记                   值
+       state                - 是否已启用临时地址。
+       maxdadattempts       - 重复地址检测尝试次数。
+                              默认值是 5。
+       maxvalidlifetime     - 临时地址最长有效生存时间。默认值是 7d (7 天)。
+       maxpreferredlifetime - 首选临时地址最长生存时间。默认值是 1d (1 天)。
+       regeneratetime       - 新地址生成时反对临时地址的时间。默认值是
+                              5s (5 秒钟)。
+       maxrandomtime        - 启动时计算随机数的延迟上限。默认值是
+                              10m (10 分钟)。
+       store                - 下列其中一个值:
+                              active: 更改仅持续到下一次启动。
+                              persistent: 更改持久有效(默认值).
+
+说明: 修改关于临时地址生成的参数。如果指定了 randomtime，则不使用
+      maxrandomtime。时间值可以为天、小时、分钟和秒，例如 1d2h3m4s。
+
+
+netsh interface ipv6&gt;
+</code></pre>
+<p>下面解释各个参数的用途</p>
+<table>
+<thead>
+<tr>
+<th align="center">参数</th>
+<th align="center">参考翻译</th>
+<th align="center">接受类型</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>state</code></td>
+<td align="center">启用</td>
+<td align="center">文本 <code>enabled</code> \ <code>disabled</code></td>
+<td align="left"><code>enabled</code>(启用) 或 <code>disabled</code>(禁用) 临时地址生成。</td>
+</tr>
+<tr>
+<td align="center"><code>maxdadattempts</code></td>
+<td align="center">重复地址检测尝试次数</td>
+<td align="center"><code>Number</code></td>
+<td align="left">在生成临时地址后，系统会执行重复地址检测（DAD）来确认该地址是否已被网络中的其他设备使用。若发生冲突，系统会尝试重新生成新地址。该参数控制生成过程中可尝试的最大次数。</td>
+</tr>
+<tr>
+<td align="center"><code>maxvalidlifetime</code></td>
+<td align="center">最大有效寿命</td>
+<td align="center">时间</td>
+<td align="left">控制临时地址可使用的最长时间。到期后地址销毁。</td>
+</tr>
+<tr>
+<td align="center"><code>maxpreferredlifetime</code></td>
+<td align="center">最大首选寿命</td>
+<td align="center">时间</td>
+<td align="left">控制临时地址可建立连接的最长时间。到期后不可使用该地址建立新连接，现有连接不受影响。</td>
+</tr>
+<tr>
+<td align="center"><code>regeneratetime</code></td>
+<td align="center">弃用临时地址之前何时生成新地址</td>
+<td align="center">时间</td>
+<td align="left">系统在弃用原有临时地址时，会在首选寿命之前，间隔一段时间，再生成新的临时地址。该时间间隔由该参数控制。</td>
+</tr>
+<tr>
+<td align="center"><code>maxrandomtime</code></td>
+<td align="center">启动时的最大随机延迟</td>
+<td align="center">时间</td>
+<td align="left">在可以生成临时地址之后（通常是系统启动、网络变化时）延迟生成的时间上限。</td>
+</tr>
+<tr>
+<td align="center"><code>store</code></td>
+<td align="center">持久性</td>
+<td align="center"><code>active</code> \ <code>persistent</code></td>
+<td align="left">生成的临时地址持久性。<code>active</code> 参数要求系统再次启动时丢弃临时地址。<code>persistent</code> 参数则保留临时地址。</td>
+</tr>
+</tbody></table>
+<h4 id="Examples"><a href="#Examples" class="headerlink" title="Examples."></a>Examples.</h4><p>要禁用临时 IPv6 地址：</p>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">netsh interface ipv6 <span class="built_in">set</span> privacy state=disabled</span><br></pre></td></tr></table></figure>
+<p>反之，启用就是：</p>
+<figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">netsh interface ipv6 <span class="built_in">set</span> privacy state=enabled</span><br></pre></td></tr></table></figure>
+
+<h3 id="Windows-PowerShell-NetIPv6Protocol"><a href="#Windows-PowerShell-NetIPv6Protocol" class="headerlink" title="Windows PowerShell NetIPv6Protocol"></a>Windows PowerShell NetIPv6Protocol</h3><p>若使用 <code>PowerShell</code> 进行设置，请另行参阅 cmdlet 文档 <code>Set-NetIPv6Protocol</code>。<br><em><a href="https://learn.microsoft.com/zh-cn/powershell/module/nettcpip/set-netipv6protocol?view=windowsserver2022-ps">Set-NetIPv6Protocol (NetTCPIP) | Microsoft Learn</a></em></p>
+<pre><code> System32  Get-NetIPv6Protocol
+
+DefaultHopLimit               : 128
+NeighborCacheLimit(Entries)   : 1024
+RouteCacheLimit(Entries)      : 32768
+ReassemblyLimit(Bytes)        : 133739168
+IcmpRedirects                 : Enabled
+SourceRoutingBehavior         : DontForward
+DhcpMediaSense                : Enabled
+MediaSenseEventLog            : Disabled
+MldLevel                      : All
+MldVersion                    : Version2
+MulticastForwarding           : Disabled
+GroupForwardedFragments       : Disabled
+RandomizeIdentifiers          : Enabled
+AddressMaskReply              : Disabled
+UseTemporaryAddresses         : Enabled
+MaxTemporaryDadAttempts       : 3
+MaxTemporaryValidLifetime     : 7.00:00:00
+MaxTemporaryPreferredLifetime : 1.00:00:00
+TemporaryRegenerateTime       : 00:00:05
+MaxTemporaryDesyncTime        : 00:10:00
+DeadGatewayDetection          : Enabled
+
+ Administrator   System32      
+</code></pre>
+<p>注：以下仅列出与临时 IPv6 地址相关的参数，其他参数（如 DefaultHopLimit、NeighborCacheLimit 等）不在本文讨论范围内。<br>| 参数 | 参考翻<br>| <code>MaxTemporaryValidLifetime     </code> | 有效的最长时间长度 | <code>TimeSpan</code> | 控制临时地址可使用的最长时间。到期后地址销毁。 |<br>| <code>MaxTemporaryPreferredLifetime </code> | 最大临时优先使用期限 | <code>TimeSpan</code> | 控制临时地址可建立连接的最长时间。到期后不可使用该地址建立新连接，现有连接不受影响。 |<br>| <code>TemporaryRegenerateTime       </code> | 弃用临时地址（首选寿命）之前何时生成新地址 | <code>TimeSpan</code> | 表示在生成新地址后、旧临时地址被废弃之前的时间长度 |<br>| <code>MaxTemporaryDesyncTime        </code> | 最大去同步时间 | <code>TimeSpan</code> | 最大去同步时间，用于在生成临时地址时引入随机延迟，避免多个设备同步更新地址导致隐私泄露。 |<br>| <code>RandomizeIdentifiers</code> | 生成接口标识符时是否使用随机值 | 文本 <code>enabled</code> \ <code>disabled</code> | 控制Windows操作系统在生成接口标识符（Interface Identifier，IID）时是否使用随机值。</p>
+<h4 id="Examples-1"><a href="#Examples-1" class="headerlink" title="Examples"></a>Examples</h4><p>禁用临时 IPv6 地址</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set-NetIPv6Protocol</span> <span class="literal">-UseTemporaryAddresses</span> Disabled</span><br></pre></td></tr></table></figure>
+<p>启用临时 IPv6 地址</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Set-NetIPv6Protocol</span> <span class="literal">-UseTemporaryAddresses</span> Enabled</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><span id="References-text"></span></p>
+<ul>
+<li><a href="https://www.rfc-editor.org/info/rfc4941/">RFC 4941: Privacy Extensions for Stateless Address Autoconfiguration in IPv6</a></li>
+<li><a href="https://www.rfc-editor.org/info/rfc8981/">RFC 8981: Temporary Address Extensions for Stateless Address Autoconfiguration in IPv6</a></li>
+<li><a href="https://learn.microsoft.com/zh-cn/windows-server/administration/windows-commands/netsh">网络命令行工具 (netsh) | Microsoft Learn</a></li>
+<li><table>
+<thead>
+<tr>
+<th align="center">[Set-NetIPv6Protocol (NetTCPIP)</th>
+<th align="center">Microsoft Learn](<a href="https://learn.microsoft.com/zh-cn/powershell/module/nettcpip/set-netipv6protocol?view=windowsserver2022-ps)%E8%AF%91">https://learn.microsoft.com/zh-cn/powershell/module/nettcpip/set-netipv6protocol?view=windowsserver2022-ps)译</a></th>
+<th align="center">接受</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>UseTemporaryAddresses         </code></td>
+<td align="center">使用临时地址</td>
+<td align="center">文本 <code>enabled</code> \ <code>disabled</code></td>
+<td align="left"><code>enabled</code>(启用) 或 <code>disabled</code>(禁用) 临时地址生成。</td>
+</tr>
+<tr>
+<td align="center"><code>MaxTemporaryDadAttempts       </code></td>
+<td align="center">最大临时地址生成尝试次数</td>
+<td align="center"><code>TimeSpan</code></td>
+<td align="left">在生成临时地址后，系统会执行重复地址检测（DAD）来确认该地址是否已被网络中的其他设备使用。若发生冲突，系统会尝试重新生成新地址。该参数控制生成过程中可尝试的最大次数。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+        <tag>网络</tag>
+        <tag>IPv6</tag>
       </tags>
   </entry>
 </search>
